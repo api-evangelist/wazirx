@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wazirx/main/json-schema/trade.json",
+  "title": "WazirX Trade",
+  "description": "Schema for a WazirX trade record",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Trade ID",
+      "example": 12345
+    },
+    "price": {
+      "type": "string",
+      "description": "Trade price",
+      "example": "3755000.0"
+    },
+    "qty": {
+      "type": "string",
+      "description": "Trade quantity in base asset",
+      "example": "0.001"
+    },
+    "quoteQty": {
+      "type": "string",
+      "description": "Trade quantity in quote asset",
+      "example": "3755.0"
+    },
+    "time": {
+      "type": "integer",
+      "description": "Trade timestamp in milliseconds",
+      "example": 1641463132
+    },
+    "isBuyerMaker": {
+      "type": "boolean",
+      "description": "Was the buyer the maker?",
+      "example": false
+    }
+  },
+  "required": ["id", "price", "qty", "quoteQty", "time", "isBuyerMaker"]
+}

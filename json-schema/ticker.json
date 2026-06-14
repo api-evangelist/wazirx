@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wazirx/main/json-schema/ticker.json",
+  "title": "WazirX 24hr Ticker",
+  "description": "Schema for a WazirX 24-hour ticker statistics object",
+  "type": "object",
+  "properties": {
+    "symbol": {
+      "type": "string",
+      "description": "Trading pair symbol",
+      "example": "btcinr"
+    },
+    "baseAsset": {
+      "type": "string",
+      "description": "Base asset of the trading pair",
+      "example": "btc"
+    },
+    "quoteAsset": {
+      "type": "string",
+      "description": "Quote asset of the trading pair",
+      "example": "inr"
+    },
+    "openPrice": {
+      "type": "string",
+      "description": "Opening price 24 hours ago",
+      "example": "3750000.0"
+    },
+    "lowPrice": {
+      "type": "string",
+      "description": "Lowest price in 24 hours",
+      "example": "3700000.0"
+    },
+    "highPrice": {
+      "type": "string",
+      "description": "Highest price in 24 hours",
+      "example": "3800000.0"
+    },
+    "lastPrice": {
+      "type": "string",
+      "description": "Latest trade price",
+      "example": "3765000.0"
+    },
+    "volume": {
+      "type": "string",
+      "description": "Total volume in base asset over 24 hours",
+      "example": "1.23456"
+    },
+    "bidPrice": {
+      "type": "string",
+      "description": "Best bid price",
+      "example": "3764000.0"
+    },
+    "askPrice": {
+      "type": "string",
+      "description": "Best ask price",
+      "example": "3766000.0"
+    },
+    "at": {
+      "type": "integer",
+      "description": "Timestamp in milliseconds",
+      "example": 1641463132
+    }
+  },
+  "required": ["symbol", "baseAsset", "quoteAsset", "openPrice", "lowPrice", "highPrice", "lastPrice", "volume"]
+}

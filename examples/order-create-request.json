@@ -1,0 +1,11 @@
+{
+  "symbol": "btcinr",
+  "side": "buy",
+  "type": "limit",
+  "quantity": "0.001",
+  "price": "3750000.0",
+  "clientOrderId": "my_order_123",
+  "recvWindow": 5000,
+  "timestamp": 1641463132000,
+  "signature": "hmac_sha256_signature_here"
+}

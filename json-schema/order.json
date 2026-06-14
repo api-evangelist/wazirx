@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wazirx/main/json-schema/order.json",
+  "title": "WazirX Order",
+  "description": "Schema for a WazirX order object",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Order ID",
+      "example": 28
+    },
+    "clientOrderId": {
+      "type": "string",
+      "description": "Client-assigned order identifier",
+      "example": "my_order_123"
+    },
+    "symbol": {
+      "type": "string",
+      "description": "Trading pair symbol",
+      "example": "btcinr"
+    },
+    "price": {
+      "type": "string",
+      "description": "Order price",
+      "example": "3750000.0"
+    },
+    "origQty": {
+      "type": "string",
+      "description": "Original order quantity",
+      "example": "0.001"
+    },
+    "executedQty": {
+      "type": "string",
+      "description": "Executed quantity",
+      "example": "0.0"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["idle", "wait", "done", "cancel"],
+      "description": "Order status: idle=not yet triggered, wait=open unfilled, done=completely filled, cancel=cancelled"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["limit", "stop_limit"],
+      "description": "Order type"
+    },
+    "side": {
+      "type": "string",
+      "enum": ["buy", "sell"],
+      "description": "Order side"
+    },
+    "stopPrice": {
+      "type": ["string", "null"],
+      "description": "Stop price for stop_limit orders",
+      "example": null
+    },
+    "createdTime": {
+      "type": "integer",
+      "description": "Order creation timestamp in milliseconds",
+      "example": 1641463132
+    },
+    "updatedTime": {
+      "type": "integer",
+      "description": "Order last update timestamp in milliseconds",
+      "example": 1641463132
+    }
+  },
+  "required": ["id", "symbol", "price", "origQty", "executedQty", "status", "type", "side"]
+}

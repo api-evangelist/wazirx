@@ -1,0 +1,13 @@
+{
+  "symbol": "btcinr",
+  "baseAsset": "btc",
+  "quoteAsset": "inr",
+  "openPrice": "3750000.0",
+  "lowPrice": "3700000.0",
+  "highPrice": "3800000.0",
+  "lastPrice": "3765000.0",
+  "volume": "1.23456",
+  "bidPrice": "3764000.0",
+  "askPrice": "3766000.0",
+  "at": 1641463132
+}

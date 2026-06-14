@@ -1,0 +1,26 @@
+{
+  "timezone": "UTC",
+  "serverTime": 1641463132,
+  "symbols": [
+    {
+      "symbol": "btcinr",
+      "status": "trading",
+      "baseAsset": "btc",
+      "quoteAsset": "inr",
+      "baseAssetPrecision": 5,
+      "quoteAssetPrecision": 0,
+      "orderTypes": ["limit", "stop_limit"],
+      "isSpotTradingAllowed": true
+    },
+    {
+      "symbol": "ethinr",
+      "status": "trading",
+      "baseAsset": "eth",
+      "quoteAsset": "inr",
+      "baseAssetPrecision": 4,
+      "quoteAssetPrecision": 0,
+      "orderTypes": ["limit", "stop_limit"],
+      "isSpotTradingAllowed": true
+    }
+  ]
+}

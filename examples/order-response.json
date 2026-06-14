@@ -1,0 +1,14 @@
+{
+  "id": 28,
+  "clientOrderId": "my_order_123",
+  "symbol": "btcinr",
+  "price": "3750000.0",
+  "origQty": "0.001",
+  "executedQty": "0.0",
+  "status": "wait",
+  "type": "limit",
+  "side": "buy",
+  "stopPrice": null,
+  "createdTime": 1641463132000,
+  "updatedTime": 1641463132000
+}
