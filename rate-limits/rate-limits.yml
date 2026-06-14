@@ -1,0 +1,127 @@
+name: WazirX API Rate Limits
+description: WazirX enforces per-endpoint rate limits on its REST API and message rate limits on WebSocket connections. Exceeding limits returns HTTP 429; repeated violations result in automatic IP bans (HTTP 418) ranging from 2 minutes to 3 days. The Retry-After response header indicates the required wait time.
+enforcement:
+  - code: 429
+    description: Rate limit exceeded — request rejected, client must back off
+  - code: 418
+    description: IP automatically banned due to repeated 429 violations
+  - code: 403
+    description: WAF (Web Application Firewall) limit violated
+  - header: Retry-After
+    description: Indicates the number of seconds to wait before retrying after a ban
+  - ipBanDurations:
+      minimum: 2 minutes
+      maximum: 3 days
+      scaling: Bans escalate with repeated violations
+restEndpoints:
+  - endpoint: GET /sapi/v1/ping
+    limit: 1
+    unit: second
+    security: NONE
+  - endpoint: GET /sapi/v1/systemStatus
+    limit: 1
+    unit: second
+    security: NONE
+  - endpoint: GET /sapi/v1/time
+    limit: 1
+    unit: second
+    security: NONE
+  - endpoint: GET /sapi/v1/exchangeInfo
+    limit: 1
+    unit: second
+    security: NONE
+  - endpoint: GET /sapi/v1/tickers/24hr
+    limit: 1
+    unit: second
+    security: NONE
+  - endpoint: GET /sapi/v1/ticker/24hr
+    limit: 1
+    unit: second
+    security: NONE
+  - endpoint: GET /sapi/v1/klines
+    limit: 1
+    unit: second
+    security: NONE
+  - endpoint: GET /sapi/v1/depth
+    limit: 2
+    unit: second
+    security: NONE
+  - endpoint: GET /sapi/v1/trades
+    limit: 1
+    unit: second
+    security: NONE
+  - endpoint: GET /sapi/v1/historicalTrades
+    limit: 1
+    unit: second
+    security: MARKET_DATA
+  - endpoint: POST /sapi/v1/order
+    limit: 10
+    unit: second
+    security: TRADE
+  - endpoint: POST /sapi/v1/order/test
+    limit: 2
+    unit: second
+    security: TRADE
+  - endpoint: GET /sapi/v1/order
+    limit: 2
+    unit: second
+    security: USER_DATA
+  - endpoint: GET /sapi/v1/openOrders
+    limit: 1
+    unit: second
+    security: USER_DATA
+  - endpoint: GET /sapi/v1/allOrders
+    limit: 1
+    unit: second
+    security: USER_DATA
+  - endpoint: DELETE /sapi/v1/order
+    limit: 10
+    unit: second
+    security: TRADE
+  - endpoint: DELETE /sapi/v1/openOrders
+    limit: 1
+    unit: second
+    security: TRADE
+  - endpoint: GET /sapi/v1/myTrades
+    limit: 2
+    unit: second
+    security: TRADE
+  - endpoint: GET /sapi/v1/account
+    limit: 1
+    unit: second
+    security: USER_DATA
+  - endpoint: GET /sapi/v1/funds
+    limit: 1
+    unit: second
+    security: USER_DATA
+  - endpoint: GET /sapi/v1/coins
+    limit: 5
+    unit: minute
+    security: USER_DATA
+  - endpoint: GET /sapi/v1/crypto/withdraws
+    limit: 5
+    unit: minute
+    security: USER_DATA
+  - endpoint: GET /sapi/v1/crypto/deposits/address
+    limit: 1
+    unit: minute
+    security: USER_DATA
+  - endpoint: POST /sapi/v1/create_auth_token
+    limit: 1
+    unit: second
+    security: TRADE
+websocket:
+  maxMessagesPerSecond: 5
+  description: Max 5 incoming messages per second per connection (ping/pong/JSON combined)
+  maxStreamsPerConnection: 1024
+  connectionDuration: 30 minutes
+  description: WebSocket connections are valid for 30 minutes; client must send ping every 30 minutes to maintain connection
+  pongTimeout: 10 minutes
+  ipBan: true
+  ipBanTrigger: Repeated disconnections or message rate violations may result in IP ban
+timing:
+  timestampRequired: true
+  timestampUnit: milliseconds
+  defaultRecvWindow: 5000
+  maxRecvWindow: 60000
+  validationRule: "timestamp < (serverTime + 1000) && (serverTime - timestamp) <= recvWindow"

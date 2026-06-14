@@ -1,0 +1,107 @@
+name: WazirX
+description: WazirX is an Indian cryptocurrency exchange (transitioning to Zettai) providing REST and WebSocket APIs for spot trading on INR and crypto markets, order management, market data, account management, and wallet operations. The exchange supports automated trading via HMAC SHA256-authenticated endpoints and real-time streaming through WebSocket connections.
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/wazirx/refs/heads/main/apis.yml
+created: '2026-06-13'
+modified: '2026-06-13'
+specificationVersion: '0.19'
+tags:
+  - Cryptocurrency
+  - Exchange
+  - Trading
+  - INR
+  - India
+  - Bitcoin
+  - WebSocket
+  - Market Data
+apis:
+  - name: WazirX REST API
+    description: The WazirX REST API provides programmatic access to India's cryptocurrency exchange for spot trading, order management, market data retrieval, account information, wallet operations, and sub-account management on INR and crypto markets.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://docs.wazirx.com/
+    baseURL: https://api.wazirx.com
+    tags:
+      - Cryptocurrency
+      - REST
+      - Trading
+      - Orders
+      - Market Data
+      - Account
+      - Wallet
+    properties:
+      - type: Documentation
+        url: https://docs.wazirx.com/
+      - type: OpenAPI
+        url: https://raw.githubusercontent.com/api-evangelist/wazirx/refs/heads/main/openapi.yml
+      - type: PostmanCollection
+        url: https://github.com/wazirx/wazirx-api-postman
+      - type: PythonSDK
+        url: https://github.com/WazirX/wazirx-connector-python
+      - type: RubySDK
+        url: https://github.com/WazirX/wazirx-connector-ruby
+      - type: NodeJSSDK
+        url: https://github.com/WazirX/wazirx-connector-nodejs
+      - type: Plans
+        url: https://raw.githubusercontent.com/api-evangelist/wazirx/refs/heads/main/plans/plans.yml
+      - type: RateLimits
+        url: https://raw.githubusercontent.com/api-evangelist/wazirx/refs/heads/main/rate-limits/rate-limits.yml
+      - type: FinOps
+        url: https://raw.githubusercontent.com/api-evangelist/wazirx/refs/heads/main/finops/finops.yml
+    contact:
+      - FN: WazirX API Support
+        email: api@wazirx.com
+        url: https://t.me/+RSDiciJ7ccPVU9mB
+  - name: WazirX WebSocket API
+    description: The WazirX WebSocket API provides real-time streaming for market data including trades, 24hr tickers, candlestick (kline) data, and order book depth updates. Private streams for account balance changes, order updates, and own trade executions require authentication via an auth token.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://docs.wazirx.com/
+    baseURL: wss://stream.wazirx.com/stream
+    tags:
+      - WebSocket
+      - Real-time
+      - Streaming
+      - Market Data
+      - Trades
+      - Order Book
+    properties:
+      - type: Documentation
+        url: https://docs.wazirx.com/
+      - type: Plans
+        url: https://raw.githubusercontent.com/api-evangelist/wazirx/refs/heads/main/plans/plans.yml
+      - type: RateLimits
+        url: https://raw.githubusercontent.com/api-evangelist/wazirx/refs/heads/main/rate-limits/rate-limits.yml
+    contact:
+      - FN: WazirX API Support
+        email: api@wazirx.com
+        url: https://t.me/+RSDiciJ7ccPVU9mB
+common:
+  - type: Website
+    url: https://wazirx.com/
+  - type: Blog
+    url: https://wazirx.com/blog/
+  - type: Support
+    url: https://support.wazirx.com/
+  - type: GitHub
+    url: https://github.com/WazirX
+  - type: Status
+    url: https://wazirx.statuspage.io/
+  - type: SignUp
+    url: https://wazirx.com/register
+  - type: Login
+    url: https://wazirx.com/login
+  - type: ApiKeysSettings
+    url: https://wazirx.com/settings/keys
+  - type: TermsOfService
+    url: https://wazirx.com/terms
+  - type: PrivacyPolicy
+    url: https://wazirx.com/privacy
+  - type: Plans
+    url: https://raw.githubusercontent.com/api-evangelist/wazirx/refs/heads/main/plans/plans.yml
+  - type: RateLimits
+    url: https://raw.githubusercontent.com/api-evangelist/wazirx/refs/heads/main/rate-limits/rate-limits.yml
+  - type: FinOps
+    url: https://raw.githubusercontent.com/api-evangelist/wazirx/refs/heads/main/finops/finops.yml
+maintainers:
+  - FN: API Evangelist
+    url: https://apievangelist.com
+    email: info@apievangelist.com

@@ -1,0 +1,68 @@
+name: WazirX API Plans
+description: WazirX does not offer tiered API subscription plans. API access is available to all registered users at no additional cost beyond standard trading account registration. API keys (up to 5 per account) are created via account settings and access is governed by rate limits and security permissions.
+plans:
+  - name: Standard API Access
+    description: All WazirX registered users receive free API access. Up to 5 API keys may be created per account. Keys can be restricted by IP address and scoped to read-only or trading permissions. No additional subscription or payment is required for API access.
+    url: https://wazirx.com/settings/keys
+    price: 0.00
+    currency: INR
+    rateLimits:
+      - name: Ping
+        description: System ping endpoint
+        limit: 1
+        unit: second
+      - name: Market Data
+        description: General market data endpoints (tickers, klines, depth, trades)
+        limit: 1
+        unit: second
+      - name: Order Book Depth
+        description: Order book depth endpoint
+        limit: 2
+        unit: second
+      - name: Place Order
+        description: Create or cancel orders
+        limit: 10
+        unit: second
+      - name: Historical Trades
+        description: Historical trade data retrieval
+        limit: 1
+        unit: second
+      - name: Open Orders
+        description: Retrieve open or all orders
+        limit: 1
+        unit: second
+      - name: My Trades
+        description: Personal trade history
+        limit: 2
+        unit: second
+      - name: Account Info
+        description: Account and funds information
+        limit: 1
+        unit: second
+      - name: Coins / Withdrawals
+        description: Wallet coin and withdrawal history
+        limit: 5
+        unit: minute
+      - name: Deposit Address
+        description: Crypto deposit address retrieval
+        limit: 1
+        unit: minute
+      - name: Auth Token
+        description: WebSocket authentication token creation
+        limit: 1
+        unit: second
+      - name: WebSocket Messages
+        description: Incoming WebSocket messages (ping/pong/JSON)
+        limit: 5
+        unit: second
+      - name: WebSocket Streams
+        description: Maximum concurrent streams per WebSocket connection
+        limit: 1024
+        unit: connection
+    apiKeys:
+      maxKeys: 5
+      ipRestriction: true
+      permissions:
+        - read
+        - spot_trading
+        - sub_account_transfer

@@ -1,0 +1,41 @@
+name: WazirX FinOps
+description: WazirX generates revenue through trading fees on its spot exchange platform. API access itself is free for all registered users. Trading fees are based on a tiered structure using 30-day trading volume (in INR) and WRX token holdings as discount levers. Futures trading carries separate, lower fee rates.
+apiAccessCost:
+  cost: 0.00
+  currency: INR
+  description: API access is free for all registered WazirX users. No subscription or API-specific payment is required.
+tradingFees:
+  spot:
+    model: tiered_maker_taker
+    description: Spot trading fees are calculated based on 30-day trailing INR trading volume and WRX token holdings. Higher volume and WRX holdings reduce the fee rate. The standard flat rate is 0.20% per trade.
+    standardRate: 0.20%
+    discountFactors:
+      - name: 30-day Trading Volume (INR)
+        description: Higher 30-day cumulative INR trading volume earns lower fee tiers
+      - name: WRX Holdings
+        description: Holding WRX tokens on the exchange provides additional fee discounts
+    exampleRate:
+      volume30d: "₹1,32,00,000"
+      wrxHoldings: 11535.98
+      feeRate: 0.23%
+    updatedPolicy: "May 22, 2023"
+    policyUrl: https://support.wazirx.com/hc/en-us/articles/5710794149146-Update-on-Trading-Fees-Structure-on-WazirX-INR-pairs
+  futures:
+    description: Crypto futures trading with the lowest fees among Indian exchanges; no minimum volume threshold required
+    makerFee: 0.02%
+    takerFee: 0.04%
+    inrSupported: true
+    description: Futures positions can be opened directly in INR without converting to USDT
+withdrawalFees:
+  description: Withdrawal fees vary by coin and network. Check the WazirX fees page for current per-asset withdrawal fees.
+  url: https://wazirx.com/fees
+depositFees:
+  description: Crypto deposits are free. INR deposits via UPI/NEFT/IMPS may have varying processing times.
+wrxToken:
+  name: WRX
+  description: WazirX's native utility token used to receive trading fee discounts on the platform. WRX holdings are measured at the time of trade execution.
+  discountMechanism: Fee tier reduction based on WRX balance held on exchange
+costEstimation:
+  description: For API-driven trading bots, primary costs are the trading fees applied per filled order. With a standard 0.20% fee, a ₹1,00,000 order incurs ₹200 in fees. High-frequency or high-volume trading strategies benefit from higher-tier discounts.
+  feeUrl: https://wazirx.com/fees
+  blogReference: https://wazirx.com/blog/wazirx-trading-fees-update/
