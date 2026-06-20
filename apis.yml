@@ -1,6 +1,6 @@
 name: WazirX
 description: WazirX is an Indian cryptocurrency exchange (transitioning to Zettai) providing REST and WebSocket APIs for spot trading on INR and crypto markets, order management, market data, account management, and wallet operations. The exchange supports automated trading via HMAC SHA256-authenticated endpoints and real-time streaming through WebSocket connections.
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 url: https://raw.githubusercontent.com/api-evangelist/wazirx/refs/heads/main/apis.yml
 created: '2026-06-13'
 modified: '2026-06-13'
@@ -17,7 +17,7 @@ tags:
 apis:
   - name: WazirX REST API
     description: The WazirX REST API provides programmatic access to India's cryptocurrency exchange for spot trading, order management, market data retrieval, account information, wallet operations, and sub-account management on INR and crypto markets.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://docs.wazirx.com/
     baseURL: https://api.wazirx.com
     tags:
@@ -53,7 +53,7 @@ apis:
         url: https://t.me/+RSDiciJ7ccPVU9mB
   - name: WazirX WebSocket API
     description: The WazirX WebSocket API provides real-time streaming for market data including trades, 24hr tickers, candlestick (kline) data, and order book depth updates. Private streams for account balance changes, order updates, and own trade executions require authentication via an auth token.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://docs.wazirx.com/
     baseURL: wss://stream.wazirx.com/stream
     tags:
