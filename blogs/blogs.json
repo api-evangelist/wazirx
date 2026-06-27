@@ -2,13 +2,19 @@
   "repo": "wazirx",
   "feeds": [
     {
-      "source": "https://wazirx.com/",
-      "feed_url": "https://wazirx.com/",
+      "source": "https://wazirx.com/blog/",
+      "feed_url": "",
       "title": "",
+      "saved": 9,
+      "method": "agent-scrape"
+    },
+    {
+      "source": "https://wazirx.com/",
       "saved": 0,
-      "method": "none"
+      "error": "provider homepage, not a blog listing"
     }
   ],
-  "post_count": 0,
-  "fetched": "2026-06-14T20:42:17Z"
+  "post_count": 18,
+  "fetched": "2026-06-27T13:21:42Z",
+  "agent_pulled": "2026-06-27"
 }

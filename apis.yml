@@ -85,7 +85,7 @@ common:
     url: https://github.com/WazirX
   - type: Status
     url: https://wazirx.statuspage.io/
-  - type: SignUp
+  - type: Signup
     url: https://wazirx.com/register
   - type: Login
     url: https://wazirx.com/login
