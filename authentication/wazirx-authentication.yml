@@ -1,0 +1,24 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+  - query
+schemes:
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: X-API-KEY
+  description: API key required for MARKET_DATA and SIGNED endpoints
+  sources:
+  - openapi/openapi.yml
+- name: HmacSignature
+  type: apiKey
+  in: query
+  parameter: signature
+  description: HMAC SHA256 signature of the request parameters using the secret key
+  sources:
+  - openapi/openapi.yml

@@ -75,6 +75,10 @@ apis:
         email: api@wazirx.com
         url: https://t.me/+RSDiciJ7ccPVU9mB
 common:
+  - type: DomainSecurity
+    url: security/wazirx-domain-security.yml
+  - type: Authentication
+    url: authentication/wazirx-authentication.yml
   - type: Website
     url: https://wazirx.com/
   - type: Blog
