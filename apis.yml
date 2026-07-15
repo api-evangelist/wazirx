@@ -75,6 +75,8 @@ apis:
         email: api@wazirx.com
         url: https://t.me/+RSDiciJ7ccPVU9mB
 common:
+  - type: AgenticAccess
+    url: agentic-access/wazirx-agentic-access.yml
   - type: DomainSecurity
     url: security/wazirx-domain-security.yml
   - type: Authentication
