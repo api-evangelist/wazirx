@@ -1,0 +1,286 @@
+openapi: 3.0.3
+info:
+  title: WazirX REST Account Wallet API
+  description: 'WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.
+
+    '
+  version: 1.0.0
+  contact:
+    name: WazirX API Support
+    email: api@wazirx.com
+    url: https://docs.wazirx.com/
+  termsOfService: https://wazirx.com/terms
+servers:
+- url: https://api.wazirx.com
+  description: Production server
+security: []
+tags:
+- name: Wallet
+  description: Authenticated endpoints for coin and withdrawal/deposit management
+paths:
+  /sapi/v1/coins:
+    get:
+      summary: Coin information
+      description: Get information of coins (available for deposit and withdraw) for user. Requires USER_DATA permission.
+      operationId: getCoins
+      tags:
+      - Wallet
+      security:
+      - ApiKeyAuth: []
+        HmacSignature: []
+      parameters:
+      - $ref: '#/components/parameters/recvWindow'
+      - $ref: '#/components/parameters/timestamp'
+      - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Array of coin information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CoinInfo'
+  /sapi/v1/crypto/withdraws:
+    get:
+      summary: Withdrawal history
+      description: Fetch withdrawal history. Requires USER_DATA permission.
+      operationId: getWithdrawals
+      tags:
+      - Wallet
+      security:
+      - ApiKeyAuth: []
+        HmacSignature: []
+      parameters:
+      - name: coin
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Coin symbol filter
+      - name: transferType
+        in: query
+        required: false
+        schema:
+          type: integer
+          enum:
+          - 1
+          - 2
+        description: 'Transfer type: 1=on-chain, 2=Binance transfer'
+      - name: withdrawOrderId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 0=Email Sent, 1=Cancelled, 2=Awaiting Approval, 3=Rejected, 4=Processing, 5=Failure, 6=Completed
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 100
+          maximum: 1000
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/recvWindow'
+      - $ref: '#/components/parameters/timestamp'
+      - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Array of withdrawals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Withdrawal'
+  /sapi/v1/crypto/deposits/address:
+    get:
+      summary: Deposit address
+      description: Fetch deposit address with network. Requires USER_DATA permission.
+      operationId: getDepositAddress
+      tags:
+      - Wallet
+      security:
+      - ApiKeyAuth: []
+        HmacSignature: []
+      parameters:
+      - name: coin
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Coin symbol
+        example: btc
+      - name: network
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Network name
+        example: BTC
+      - $ref: '#/components/parameters/recvWindow'
+      - $ref: '#/components/parameters/timestamp'
+      - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Deposit address information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepositAddress'
+components:
+  parameters:
+    startTime:
+      name: startTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: Start time in milliseconds
+    signature:
+      name: signature
+      in: query
+      required: true
+      schema:
+        type: string
+      description: HMAC SHA256 signature of request parameters
+    endTime:
+      name: endTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: End time in milliseconds
+    recvWindow:
+      name: recvWindow
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+        maximum: 60000
+        default: 5000
+      description: Request validity window in milliseconds (max 60000)
+    timestamp:
+      name: timestamp
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: Current timestamp in milliseconds
+  schemas:
+    CoinInfo:
+      type: object
+      properties:
+        coin:
+          type: string
+          example: btc
+        rapidListed:
+          type: boolean
+        name:
+          type: string
+          example: Bitcoin
+        binanceTransferEnable:
+          type: boolean
+        networkList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Network'
+    Withdrawal:
+      type: object
+      properties:
+        binanceTransfer:
+          type: boolean
+        address:
+          type: string
+          example: 1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf
+        amount:
+          type: string
+          example: '0.001'
+        createdAt:
+          type: integer
+          format: int64
+          example: 1641463132
+        lastUpdated:
+          type: integer
+          format: int64
+          example: 1641463132
+        coin:
+          type: string
+          example: btc
+        id:
+          type: string
+          example: abc123
+        network:
+          type: string
+          example: BTC
+        status:
+          type: integer
+          description: 0=Email Sent, 1=Cancelled, 2=Awaiting Approval, 3=Rejected, 4=Processing, 5=Failure, 6=Completed
+          example: 6
+        transactionFee:
+          type: string
+          example: '0.0005'
+        txId:
+          type: string
+          example: abc123txhash
+    DepositAddress:
+      type: object
+      properties:
+        address:
+          type: string
+          example: 1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf
+        coin:
+          type: string
+          example: btc
+        tag:
+          type: string
+          nullable: true
+          example: null
+        url:
+          type: string
+          example: https://blockchain.info/address/1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf
+    Network:
+      type: object
+      properties:
+        coin:
+          type: string
+          example: btc
+        depositEnable:
+          type: boolean
+        network:
+          type: string
+          example: BTC
+        withdrawEnable:
+          type: boolean
+        withdrawFee:
+          type: string
+          example: '0.0005'
+        withdrawMin:
+          type: string
+          example: '0.001'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: API key required for MARKET_DATA and SIGNED endpoints
+    HmacSignature:
+      type: apiKey
+      in: query
+      name: signature
+      description: HMAC SHA256 signature of the request parameters using the secret key

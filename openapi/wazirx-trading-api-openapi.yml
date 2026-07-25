@@ -1,0 +1,599 @@
+openapi: 3.0.3
+info:
+  title: WazirX REST Account Trading API
+  description: 'WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.
+
+    '
+  version: 1.0.0
+  contact:
+    name: WazirX API Support
+    email: api@wazirx.com
+    url: https://docs.wazirx.com/
+  termsOfService: https://wazirx.com/terms
+servers:
+- url: https://api.wazirx.com
+  description: Production server
+security: []
+tags:
+- name: Trading
+  description: Authenticated endpoints for order management and trade history
+paths:
+  /sapi/v1/order:
+    get:
+      summary: Query order
+      description: Check an order's status. Requires USER_DATA permission.
+      operationId: getOrder
+      tags:
+      - Trading
+      security:
+      - ApiKeyAuth: []
+        HmacSignature: []
+      parameters:
+      - name: orderId
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+        description: Order ID (either orderId or clientOrderId required)
+      - name: clientOrderId
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Client order ID (either orderId or clientOrderId required)
+      - $ref: '#/components/parameters/recvWindow'
+      - $ref: '#/components/parameters/timestamp'
+      - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Order details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      summary: Place order
+      description: Send in a new order. Requires TRADE permission.
+      operationId: createOrder
+      tags:
+      - Trading
+      security:
+      - ApiKeyAuth: []
+        HmacSignature: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - symbol
+              - side
+              - type
+              - timestamp
+              - signature
+              properties:
+                symbol:
+                  type: string
+                  description: Trading pair symbol
+                  example: btcinr
+                side:
+                  type: string
+                  enum:
+                  - buy
+                  - sell
+                  description: Order side
+                type:
+                  type: string
+                  enum:
+                  - limit
+                  - stop_limit
+                  description: Order type
+                quantity:
+                  type: string
+                  description: Order quantity (required for limit and stop_limit orders)
+                  example: '0.001'
+                price:
+                  type: string
+                  description: Order price (required for limit and stop_limit orders)
+                  example: '3750000.0'
+                stopPrice:
+                  type: string
+                  description: Stop price (required for stop_limit orders)
+                clientOrderId:
+                  type: string
+                  description: Unique client order identifier
+                recvWindow:
+                  type: integer
+                  format: int64
+                  maximum: 60000
+                  description: Request validity window in milliseconds
+                timestamp:
+                  type: integer
+                  format: int64
+                  description: Current timestamp in milliseconds
+                signature:
+                  type: string
+                  description: HMAC SHA256 signature
+      responses:
+        '200':
+          description: Created order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Cancel order
+      description: Cancel an active order. Requires TRADE permission.
+      operationId: cancelOrder
+      tags:
+      - Trading
+      security:
+      - ApiKeyAuth: []
+        HmacSignature: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - symbol
+              - timestamp
+              - signature
+              properties:
+                symbol:
+                  type: string
+                  description: Trading pair symbol
+                  example: btcinr
+                orderId:
+                  type: integer
+                  format: int64
+                  description: Order ID to cancel (either orderId or clientOrderId required)
+                clientOrderId:
+                  type: string
+                  description: Client order ID to cancel (either orderId or clientOrderId required)
+                recvWindow:
+                  type: integer
+                  format: int64
+                  maximum: 60000
+                timestamp:
+                  type: integer
+                  format: int64
+                signature:
+                  type: string
+      responses:
+        '200':
+          description: Cancelled order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /sapi/v1/order/test:
+    post:
+      summary: Test new order
+      description: Test new order creation. Creates and validates a new order but does not send it to the matching engine.
+      operationId: testOrder
+      tags:
+      - Trading
+      security:
+      - ApiKeyAuth: []
+        HmacSignature: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - symbol
+              - side
+              - type
+              - timestamp
+              - signature
+              properties:
+                symbol:
+                  type: string
+                side:
+                  type: string
+                  enum:
+                  - buy
+                  - sell
+                type:
+                  type: string
+                  enum:
+                  - limit
+                  - stop_limit
+                quantity:
+                  type: string
+                price:
+                  type: string
+                stopPrice:
+                  type: string
+                clientOrderId:
+                  type: string
+                recvWindow:
+                  type: integer
+                  format: int64
+                timestamp:
+                  type: integer
+                  format: int64
+                signature:
+                  type: string
+      responses:
+        '200':
+          description: Test order validated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {}
+  /sapi/v1/openOrders:
+    get:
+      summary: Current open orders
+      description: Get all open orders on a symbol or all symbols. Requires USER_DATA permission.
+      operationId: getOpenOrders
+      tags:
+      - Trading
+      security:
+      - ApiKeyAuth: []
+        HmacSignature: []
+      parameters:
+      - $ref: '#/components/parameters/symbolOptional'
+      - name: orderId
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/recvWindow'
+      - $ref: '#/components/parameters/timestamp'
+      - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Array of open orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+    delete:
+      summary: Cancel all open orders on a symbol
+      description: Cancels all active orders on a symbol. Requires TRADE permission.
+      operationId: cancelAllOpenOrders
+      tags:
+      - Trading
+      security:
+      - ApiKeyAuth: []
+        HmacSignature: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - symbol
+              - timestamp
+              - signature
+              properties:
+                symbol:
+                  type: string
+                  description: Trading pair symbol
+                recvWindow:
+                  type: integer
+                  format: int64
+                timestamp:
+                  type: integer
+                  format: int64
+                signature:
+                  type: string
+      responses:
+        '200':
+          description: Array of cancelled orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+  /sapi/v1/allOrders:
+    get:
+      summary: All orders
+      description: Get all account orders (active, cancelled, or filled). Requires USER_DATA permission.
+      operationId: getAllOrders
+      tags:
+      - Trading
+      security:
+      - ApiKeyAuth: []
+        HmacSignature: []
+      parameters:
+      - $ref: '#/components/parameters/symbol'
+      - name: orderId
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+        description: If set, return orders >= orderId. Otherwise, return most recent orders.
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 500
+          maximum: 1000
+        description: Number of orders to return (default 500, max 1000)
+      - $ref: '#/components/parameters/recvWindow'
+      - $ref: '#/components/parameters/timestamp'
+      - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Array of all orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+  /sapi/v1/myTrades:
+    get:
+      summary: Account trade list
+      description: Get trades for a specific account and symbol. Requires TRADE permission.
+      operationId: getMyTrades
+      tags:
+      - Trading
+      security:
+      - ApiKeyAuth: []
+        HmacSignature: []
+      parameters:
+      - $ref: '#/components/parameters/symbolOptional'
+      - name: orderId
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+        description: Filter trades by order ID (either orderId or fromId can be set)
+      - name: fromId
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+        description: TradeId to fetch from (either orderId or fromId can be set)
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 500
+          maximum: 1000
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/recvWindow'
+      - $ref: '#/components/parameters/timestamp'
+      - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Array of trades
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MyTrade'
+components:
+  parameters:
+    startTime:
+      name: startTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: Start time in milliseconds
+    signature:
+      name: signature
+      in: query
+      required: true
+      schema:
+        type: string
+      description: HMAC SHA256 signature of request parameters
+    symbol:
+      name: symbol
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Trading pair symbol (e.g., btcinr)
+      example: btcinr
+    symbolOptional:
+      name: symbol
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Trading pair symbol (e.g., btcinr)
+      example: btcinr
+    endTime:
+      name: endTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: End time in milliseconds
+    recvWindow:
+      name: recvWindow
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+        maximum: 60000
+        default: 5000
+      description: Request validity window in milliseconds (max 60000)
+    timestamp:
+      name: timestamp
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: Current timestamp in milliseconds
+  schemas:
+    MyTrade:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1234
+        symbol:
+          type: string
+          example: btcinr
+        fee:
+          type: string
+          example: '0.00001'
+        feeCurrency:
+          type: string
+          example: btc
+        quoteQty:
+          type: string
+          example: '3755.0'
+        price:
+          type: string
+          example: '3755000.0'
+        qty:
+          type: string
+          example: '0.001'
+        orderId:
+          type: integer
+          format: int64
+          example: 28
+        side:
+          type: string
+          enum:
+          - buy
+          - sell
+          example: buy
+        isBuyerMaker:
+          type: boolean
+          example: false
+        time:
+          type: integer
+          format: int64
+          example: 1641463132
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 28
+        clientOrderId:
+          type: string
+          example: my_order_123
+        symbol:
+          type: string
+          example: btcinr
+        price:
+          type: string
+          example: '3750000.0'
+        origQty:
+          type: string
+          example: '0.001'
+        executedQty:
+          type: string
+          example: '0.0'
+        status:
+          type: string
+          enum:
+          - idle
+          - wait
+          - done
+          - cancel
+          example: wait
+        type:
+          type: string
+          enum:
+          - limit
+          - stop_limit
+          example: limit
+        side:
+          type: string
+          enum:
+          - buy
+          - sell
+          example: buy
+        stopPrice:
+          type: string
+          nullable: true
+          example: null
+        createdTime:
+          type: integer
+          format: int64
+          example: 1641463132
+        updatedTime:
+          type: integer
+          format: int64
+          example: 1641463132
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code
+          example: -1121
+        message:
+          type: string
+          description: Error message
+          example: Invalid symbol.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: API key required for MARKET_DATA and SIGNED endpoints
+    HmacSignature:
+      type: apiKey
+      in: query
+      name: signature
+      description: HMAC SHA256 signature of the request parameters using the secret key

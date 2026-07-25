@@ -1,0 +1,134 @@
+openapi: 3.0.3
+info:
+  title: WazirX REST Account API
+  description: 'WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.
+
+    '
+  version: 1.0.0
+  contact:
+    name: WazirX API Support
+    email: api@wazirx.com
+    url: https://docs.wazirx.com/
+  termsOfService: https://wazirx.com/terms
+servers:
+- url: https://api.wazirx.com
+  description: Production server
+security: []
+tags:
+- name: Account
+  description: Authenticated endpoints for account information and balances
+paths:
+  /sapi/v1/account:
+    get:
+      summary: Account information
+      description: Get current account information. Requires USER_DATA permission.
+      operationId: getAccount
+      tags:
+      - Account
+      security:
+      - ApiKeyAuth: []
+        HmacSignature: []
+      parameters:
+      - $ref: '#/components/parameters/recvWindow'
+      - $ref: '#/components/parameters/timestamp'
+      - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Account information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountInfo'
+  /sapi/v1/funds:
+    get:
+      summary: Fund details
+      description: Get current fund balances. Requires USER_DATA permission.
+      operationId: getFunds
+      tags:
+      - Account
+      security:
+      - ApiKeyAuth: []
+        HmacSignature: []
+      parameters:
+      - $ref: '#/components/parameters/recvWindow'
+      - $ref: '#/components/parameters/timestamp'
+      - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Array of fund balances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Fund'
+components:
+  parameters:
+    signature:
+      name: signature
+      in: query
+      required: true
+      schema:
+        type: string
+      description: HMAC SHA256 signature of request parameters
+    recvWindow:
+      name: recvWindow
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+        maximum: 60000
+        default: 5000
+      description: Request validity window in milliseconds (max 60000)
+    timestamp:
+      name: timestamp
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: Current timestamp in milliseconds
+  schemas:
+    Fund:
+      type: object
+      properties:
+        asset:
+          type: string
+          example: btc
+        free:
+          type: string
+          example: '0.001'
+        locked:
+          type: string
+          example: '0.0'
+        reservedFee:
+          type: string
+          example: '0.0'
+    AccountInfo:
+      type: object
+      properties:
+        accountType:
+          type: string
+          example: SPOT
+        canTrade:
+          type: boolean
+          example: true
+        canWithdraw:
+          type: boolean
+          example: true
+        updateTime:
+          type: integer
+          format: int64
+          example: 1641463132
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: API key required for MARKET_DATA and SIGNED endpoints
+    HmacSignature:
+      type: apiKey
+      in: query
+      name: signature
+      description: HMAC SHA256 signature of the request parameters using the secret key

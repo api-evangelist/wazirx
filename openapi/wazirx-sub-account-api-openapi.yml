@@ -1,0 +1,229 @@
+openapi: 3.0.3
+info:
+  title: WazirX REST Account Sub-Account API
+  description: 'WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.
+
+    '
+  version: 1.0.0
+  contact:
+    name: WazirX API Support
+    email: api@wazirx.com
+    url: https://docs.wazirx.com/
+  termsOfService: https://wazirx.com/terms
+servers:
+- url: https://api.wazirx.com
+  description: Production server
+security: []
+tags:
+- name: Sub-Account
+  description: Authenticated endpoints for sub-account management and fund transfers
+paths:
+  /sapi/v1/sub_account/fund_transfer:
+    post:
+      summary: Sub-account fund transfer
+      description: Transfer funds between accounts. Requires TRADE permission.
+      operationId: subAccountFundTransfer
+      tags:
+      - Sub-Account
+      security:
+      - ApiKeyAuth: []
+        HmacSignature: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - currency
+              - amount
+              - fromEmail
+              - toEmail
+              - timestamp
+              - signature
+              properties:
+                currency:
+                  type: string
+                  description: Coin/currency to transfer
+                  example: btc
+                amount:
+                  type: string
+                  description: Amount to transfer
+                  example: '0.001'
+                fromEmail:
+                  type: string
+                  description: Source account email
+                toEmail:
+                  type: string
+                  description: Destination account email
+                recvWindow:
+                  type: integer
+                  format: int64
+                timestamp:
+                  type: integer
+                  format: int64
+                signature:
+                  type: string
+      responses:
+        '200':
+          description: Transfer result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubAccountTransfer'
+  /sapi/v1/sub_account/fund_transfer/history:
+    get:
+      summary: Sub-account fund transfer history
+      description: Get sub-account fund transfer history. Requires USER_DATA permission.
+      operationId: getSubAccountFundTransferHistory
+      tags:
+      - Sub-Account
+      security:
+      - ApiKeyAuth: []
+        HmacSignature: []
+      parameters:
+      - $ref: '#/components/parameters/recvWindow'
+      - $ref: '#/components/parameters/timestamp'
+      - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Array of fund transfer history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubAccountTransferHistory'
+  /sapi/v1/sub_account/accounts:
+    get:
+      summary: Sub-account details
+      description: Get sub-account details including balances. Requires USER_DATA permission.
+      operationId: getSubAccounts
+      tags:
+      - Sub-Account
+      security:
+      - ApiKeyAuth: []
+        HmacSignature: []
+      parameters:
+      - $ref: '#/components/parameters/recvWindow'
+      - $ref: '#/components/parameters/timestamp'
+      - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Array of sub-account details
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubAccount'
+components:
+  schemas:
+    SubAccountTransfer:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        txnId:
+          type: string
+          example: txn_123
+    SubAccountTransferHistory:
+      type: object
+      properties:
+        asset:
+          type: string
+          example: btc
+        from:
+          type: string
+          example: main@example.com
+        qty:
+          type: string
+          example: '0.001'
+        status:
+          type: string
+          example: success
+        time:
+          type: integer
+          format: int64
+          example: 1641463132
+        to:
+          type: string
+          example: sub@example.com
+        txnId:
+          type: string
+          example: txn_123
+    SubAccountBalance:
+      type: object
+      properties:
+        asset:
+          type: string
+          example: btc
+        free:
+          type: string
+          example: '0.001'
+        locked:
+          type: string
+          example: '0.0'
+    SubAccount:
+      type: object
+      properties:
+        action:
+          type: string
+          example: active
+        balance:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubAccountBalance'
+        created_at:
+          type: integer
+          format: int64
+          example: 1641463132
+        email:
+          type: string
+          example: sub@example.com
+        emailVerification:
+          type: boolean
+        portfolio:
+          type: string
+          example: '0.0'
+        status:
+          type: string
+          example: active
+  parameters:
+    signature:
+      name: signature
+      in: query
+      required: true
+      schema:
+        type: string
+      description: HMAC SHA256 signature of request parameters
+    recvWindow:
+      name: recvWindow
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+        maximum: 60000
+        default: 5000
+      description: Request validity window in milliseconds (max 60000)
+    timestamp:
+      name: timestamp
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: Current timestamp in milliseconds
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: API key required for MARKET_DATA and SIGNED endpoints
+    HmacSignature:
+      type: apiKey
+      in: query
+      name: signature
+      description: HMAC SHA256 signature of the request parameters using the secret key

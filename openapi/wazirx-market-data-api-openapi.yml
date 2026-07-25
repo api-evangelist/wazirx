@@ -1,0 +1,359 @@
+openapi: 3.0.3
+info:
+  title: WazirX REST Account Market Data API
+  description: 'WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.
+
+    '
+  version: 1.0.0
+  contact:
+    name: WazirX API Support
+    email: api@wazirx.com
+    url: https://docs.wazirx.com/
+  termsOfService: https://wazirx.com/terms
+servers:
+- url: https://api.wazirx.com
+  description: Production server
+security: []
+tags:
+- name: Market Data
+  description: Public market data endpoints for price, volume, and order book information
+paths:
+  /sapi/v1/tickers/24hr:
+    get:
+      summary: 24hr tickers for all symbols
+      description: 24 hour rolling window price change statistics for all symbols
+      operationId: getTickers24hr
+      tags:
+      - Market Data
+      responses:
+        '200':
+          description: Array of 24hr ticker statistics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ticker24hr'
+  /sapi/v1/ticker/24hr:
+    get:
+      summary: 24hr ticker for a symbol
+      description: 24 hour rolling window price change statistics for a single symbol
+      operationId: getTicker24hr
+      tags:
+      - Market Data
+      parameters:
+      - $ref: '#/components/parameters/symbol'
+      responses:
+        '200':
+          description: 24hr ticker statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticker24hr'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /sapi/v1/klines:
+    get:
+      summary: Kline/Candlestick data
+      description: Kline/candlestick bars for a symbol. Klines are uniquely identified by their open time.
+      operationId: getKlines
+      tags:
+      - Market Data
+      parameters:
+      - $ref: '#/components/parameters/symbol'
+      - name: interval
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - 1m
+          - 5m
+          - 15m
+          - 30m
+          - 1h
+          - 2h
+          - 4h
+          - 6h
+          - 12h
+          - 1d
+          - 1w
+        description: Kline interval
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 500
+          maximum: 2000
+        description: Number of klines to return (default 500, max 2000)
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      responses:
+        '200':
+          description: Array of kline data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Kline'
+  /sapi/v1/depth:
+    get:
+      summary: Order book depth
+      description: Get order book for a symbol
+      operationId: getOrderBook
+      tags:
+      - Market Data
+      parameters:
+      - $ref: '#/components/parameters/symbol'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 20
+          maximum: 1000
+          enum:
+          - 1
+          - 5
+          - 10
+          - 20
+          - 50
+          - 100
+          - 500
+          - 1000
+        description: Number of price levels to return (default 20, max 1000)
+      responses:
+        '200':
+          description: Order book depth
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderBook'
+  /sapi/v1/trades:
+    get:
+      summary: Recent trades
+      description: Get recent trades on a market. Trades are sorted in latest to oldest (descending) order.
+      operationId: getRecentTrades
+      tags:
+      - Market Data
+      parameters:
+      - $ref: '#/components/parameters/symbol'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 500
+          maximum: 1000
+        description: Number of trades to return (default 500, max 1000)
+      responses:
+        '200':
+          description: Array of recent trades
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trade'
+  /sapi/v1/historicalTrades:
+    get:
+      summary: Historical trades
+      description: Get older market trades. Requires MARKET_DATA permission.
+      operationId: getHistoricalTrades
+      tags:
+      - Market Data
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - $ref: '#/components/parameters/symbol'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 500
+          maximum: 1000
+        description: Number of trades to return (default 500, max 1000)
+      - name: fromId
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+        description: TradeId to fetch from. Default gets most recent trades.
+      responses:
+        '200':
+          description: Array of historical trades
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trade'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    Ticker24hr:
+      type: object
+      properties:
+        symbol:
+          type: string
+          example: btcinr
+        baseAsset:
+          type: string
+          example: btc
+        quoteAsset:
+          type: string
+          example: inr
+        openPrice:
+          type: string
+          example: '3750000.0'
+        lowPrice:
+          type: string
+          example: '3700000.0'
+        highPrice:
+          type: string
+          example: '3800000.0'
+        lastPrice:
+          type: string
+          example: '3765000.0'
+        volume:
+          type: string
+          example: '1.23456'
+        bidPrice:
+          type: string
+          example: '3764000.0'
+        askPrice:
+          type: string
+          example: '3766000.0'
+        at:
+          type: integer
+          format: int64
+          description: Timestamp in milliseconds
+          example: 1641463132
+    OrderBook:
+      type: object
+      properties:
+        lastUpdateAt:
+          type: integer
+          format: int64
+          example: 1641463132
+        asks:
+          type: array
+          description: Array of [price, quantity] pairs
+          items:
+            type: array
+            items:
+              type: string
+          example:
+          - - '3766000.0'
+            - '0.5'
+          - - '3767000.0'
+            - '1.0'
+        bids:
+          type: array
+          description: Array of [price, quantity] pairs
+          items:
+            type: array
+            items:
+              type: string
+          example:
+          - - '3764000.0'
+            - '0.3'
+          - - '3763000.0'
+            - '0.8'
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code
+          example: -1121
+        message:
+          type: string
+          description: Error message
+          example: Invalid symbol.
+    Trade:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 12345
+        price:
+          type: string
+          example: '3755000.0'
+        qty:
+          type: string
+          example: '0.001'
+        quoteQty:
+          type: string
+          example: '3755.0'
+        time:
+          type: integer
+          format: int64
+          example: 1641463132
+        isBuyerMaker:
+          type: boolean
+          example: false
+    Kline:
+      type: array
+      description: '[openTime, open, high, low, close, volume]'
+      items:
+        oneOf:
+        - type: integer
+        - type: string
+      example:
+      - 1641463020
+      - '3750000.0'
+      - '3760000.0'
+      - '3748000.0'
+      - '3755000.0'
+      - '0.5'
+  parameters:
+    startTime:
+      name: startTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: Start time in milliseconds
+    symbol:
+      name: symbol
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Trading pair symbol (e.g., btcinr)
+      example: btcinr
+    endTime:
+      name: endTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: End time in milliseconds
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: API key required for MARKET_DATA and SIGNED endpoints
+    HmacSignature:
+      type: apiKey
+      in: query
+      name: signature
+      description: HMAC SHA256 signature of the request parameters using the secret key

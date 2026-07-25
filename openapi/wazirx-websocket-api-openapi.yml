@@ -1,0 +1,78 @@
+openapi: 3.0.3
+info:
+  title: WazirX REST Account WebSocket API
+  description: 'WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.
+
+    '
+  version: 1.0.0
+  contact:
+    name: WazirX API Support
+    email: api@wazirx.com
+    url: https://docs.wazirx.com/
+  termsOfService: https://wazirx.com/terms
+servers:
+- url: https://api.wazirx.com
+  description: Production server
+security: []
+tags:
+- name: WebSocket
+  description: Endpoints for WebSocket authentication token generation
+paths:
+  /sapi/v1/create_auth_token:
+    post:
+      summary: Create WebSocket auth token
+      description: Create an authentication token for WebSocket private streams. Requires USER_DATA permission.
+      operationId: createAuthToken
+      tags:
+      - WebSocket
+      security:
+      - ApiKeyAuth: []
+        HmacSignature: []
+      requestBody:
+        required: false
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - timestamp
+              - signature
+              properties:
+                recvWindow:
+                  type: integer
+                  format: int64
+                timestamp:
+                  type: integer
+                  format: int64
+                signature:
+                  type: string
+      responses:
+        '200':
+          description: Auth token for WebSocket connections
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+components:
+  schemas:
+    AuthToken:
+      type: object
+      properties:
+        auth_key:
+          type: string
+          example: eyJhbGciOiJIUzI1NiJ9...
+        timeout_duration:
+          type: integer
+          description: Token validity in seconds
+          example: 900
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: API key required for MARKET_DATA and SIGNED endpoints
+    HmacSignature:
+      type: apiKey
+      in: query
+      name: signature
+      description: HMAC SHA256 signature of the request parameters using the secret key

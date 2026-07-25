@@ -1,0 +1,153 @@
+openapi: 3.0.3
+info:
+  title: WazirX REST Account General API
+  description: 'WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.
+
+    '
+  version: 1.0.0
+  contact:
+    name: WazirX API Support
+    email: api@wazirx.com
+    url: https://docs.wazirx.com/
+  termsOfService: https://wazirx.com/terms
+servers:
+- url: https://api.wazirx.com
+  description: Production server
+security: []
+tags:
+- name: General
+  description: General API endpoints for connectivity and system information
+paths:
+  /sapi/v1/ping:
+    get:
+      summary: Test connectivity
+      description: Test connectivity to the REST API
+      operationId: ping
+      tags:
+      - General
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {}
+  /sapi/v1/systemStatus:
+    get:
+      summary: System status
+      description: Returns the current system status
+      operationId: getSystemStatus
+      tags:
+      - General
+      responses:
+        '200':
+          description: System status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemStatus'
+  /sapi/v1/time:
+    get:
+      summary: Server time
+      description: Test connectivity to the REST API and get the current server time
+      operationId: getServerTime
+      tags:
+      - General
+      responses:
+        '200':
+          description: Server time
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerTime'
+  /sapi/v1/exchangeInfo:
+    get:
+      summary: Exchange information
+      description: Returns current exchange trading rules and symbol information
+      operationId: getExchangeInfo
+      tags:
+      - General
+      responses:
+        '200':
+          description: Exchange information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeInfo'
+components:
+  schemas:
+    ServerTime:
+      type: object
+      properties:
+        serverTime:
+          type: integer
+          format: int64
+          description: Current server time in milliseconds
+          example: 1641463132
+    Symbol:
+      type: object
+      properties:
+        symbol:
+          type: string
+          example: btcinr
+        status:
+          type: string
+          example: trading
+        baseAsset:
+          type: string
+          example: btc
+        quoteAsset:
+          type: string
+          example: inr
+        baseAssetPrecision:
+          type: integer
+          example: 5
+        quoteAssetPrecision:
+          type: integer
+          example: 0
+        orderTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - limit
+            - stop_limit
+        isSpotTradingAllowed:
+          type: boolean
+    SystemStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          description: System status
+          example: normal
+        message:
+          type: string
+          description: Status message
+          example: System is running normally
+    ExchangeInfo:
+      type: object
+      properties:
+        timezone:
+          type: string
+          example: UTC
+        serverTime:
+          type: integer
+          format: int64
+          example: 1641463132
+        symbols:
+          type: array
+          items:
+            $ref: '#/components/schemas/Symbol'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: API key required for MARKET_DATA and SIGNED endpoints
+    HmacSignature:
+      type: apiKey
+      in: query
+      name: signature
+      description: HMAC SHA256 signature of the request parameters using the secret key
