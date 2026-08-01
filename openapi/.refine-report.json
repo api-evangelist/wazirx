@@ -1,0 +1,26 @@
+{
+  "provider": "wazirx",
+  "sources": [
+    "wazirx-account-api-openapi.yml",
+    "wazirx-general-api-openapi.yml",
+    "wazirx-market-data-api-openapi.yml",
+    "wazirx-sub-account-api-openapi.yml",
+    "wazirx-trading-api-openapi.yml",
+    "wazirx-wallet-api-openapi.yml",
+    "wazirx-websocket-api-openapi.yml"
+  ],
+  "outputs": [
+    "wazirx-account-api-openapi.yml",
+    "wazirx-general-api-openapi.yml",
+    "wazirx-market-data-api-openapi.yml",
+    "wazirx-sub-account-api-openapi.yml",
+    "wazirx-trading-api-openapi.yml",
+    "wazirx-wallet-api-openapi.yml",
+    "wazirx-websocket-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

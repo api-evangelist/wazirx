@@ -1,0 +1,1529 @@
+openapi: 3.0.3
+info:
+  title: WazirX REST API
+  description: >
+    WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs
+    for spot trading on INR and crypto markets. The API supports order management,
+    market data retrieval, account management, wallet operations, and sub-account
+    management. Authentication uses HMAC SHA256 signatures for signed endpoints.
+  version: 1.0.0
+  contact:
+    name: WazirX API Support
+    email: api@wazirx.com
+    url: https://docs.wazirx.com/
+  termsOfService: https://wazirx.com/terms
+servers:
+  - url: https://api.wazirx.com
+    description: Production server
+
+security: []
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: API key required for MARKET_DATA and SIGNED endpoints
+    HmacSignature:
+      type: apiKey
+      in: query
+      name: signature
+      description: HMAC SHA256 signature of the request parameters using the secret key
+
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code
+          example: -1121
+        message:
+          type: string
+          description: Error message
+          example: "Invalid symbol."
+
+    SystemStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          description: System status
+          example: "normal"
+        message:
+          type: string
+          description: Status message
+          example: "System is running normally"
+
+    ServerTime:
+      type: object
+      properties:
+        serverTime:
+          type: integer
+          format: int64
+          description: Current server time in milliseconds
+          example: 1641463132
+
+    Symbol:
+      type: object
+      properties:
+        symbol:
+          type: string
+          example: "btcinr"
+        status:
+          type: string
+          example: "trading"
+        baseAsset:
+          type: string
+          example: "btc"
+        quoteAsset:
+          type: string
+          example: "inr"
+        baseAssetPrecision:
+          type: integer
+          example: 5
+        quoteAssetPrecision:
+          type: integer
+          example: 0
+        orderTypes:
+          type: array
+          items:
+            type: string
+            enum: [limit, stop_limit]
+        isSpotTradingAllowed:
+          type: boolean
+
+    ExchangeInfo:
+      type: object
+      properties:
+        timezone:
+          type: string
+          example: "UTC"
+        serverTime:
+          type: integer
+          format: int64
+          example: 1641463132
+        symbols:
+          type: array
+          items:
+            $ref: '#/components/schemas/Symbol'
+
+    Ticker24hr:
+      type: object
+      properties:
+        symbol:
+          type: string
+          example: "btcinr"
+        baseAsset:
+          type: string
+          example: "btc"
+        quoteAsset:
+          type: string
+          example: "inr"
+        openPrice:
+          type: string
+          example: "3750000.0"
+        lowPrice:
+          type: string
+          example: "3700000.0"
+        highPrice:
+          type: string
+          example: "3800000.0"
+        lastPrice:
+          type: string
+          example: "3765000.0"
+        volume:
+          type: string
+          example: "1.23456"
+        bidPrice:
+          type: string
+          example: "3764000.0"
+        askPrice:
+          type: string
+          example: "3766000.0"
+        at:
+          type: integer
+          format: int64
+          description: Timestamp in milliseconds
+          example: 1641463132
+
+    Kline:
+      type: array
+      description: "[openTime, open, high, low, close, volume]"
+      items:
+        oneOf:
+          - type: integer
+          - type: string
+      example: [1641463020, "3750000.0", "3760000.0", "3748000.0", "3755000.0", "0.5"]
+
+    Trade:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 12345
+        price:
+          type: string
+          example: "3755000.0"
+        qty:
+          type: string
+          example: "0.001"
+        quoteQty:
+          type: string
+          example: "3755.0"
+        time:
+          type: integer
+          format: int64
+          example: 1641463132
+        isBuyerMaker:
+          type: boolean
+          example: false
+
+    OrderBook:
+      type: object
+      properties:
+        lastUpdateAt:
+          type: integer
+          format: int64
+          example: 1641463132
+        asks:
+          type: array
+          description: "Array of [price, quantity] pairs"
+          items:
+            type: array
+            items:
+              type: string
+          example: [["3766000.0", "0.5"], ["3767000.0", "1.0"]]
+        bids:
+          type: array
+          description: "Array of [price, quantity] pairs"
+          items:
+            type: array
+            items:
+              type: string
+          example: [["3764000.0", "0.3"], ["3763000.0", "0.8"]]
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 28
+        clientOrderId:
+          type: string
+          example: "my_order_123"
+        symbol:
+          type: string
+          example: "btcinr"
+        price:
+          type: string
+          example: "3750000.0"
+        origQty:
+          type: string
+          example: "0.001"
+        executedQty:
+          type: string
+          example: "0.0"
+        status:
+          type: string
+          enum: [idle, wait, done, cancel]
+          example: "wait"
+        type:
+          type: string
+          enum: [limit, stop_limit]
+          example: "limit"
+        side:
+          type: string
+          enum: [buy, sell]
+          example: "buy"
+        stopPrice:
+          type: string
+          nullable: true
+          example: null
+        createdTime:
+          type: integer
+          format: int64
+          example: 1641463132
+        updatedTime:
+          type: integer
+          format: int64
+          example: 1641463132
+
+    MyTrade:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1234
+        symbol:
+          type: string
+          example: "btcinr"
+        fee:
+          type: string
+          example: "0.00001"
+        feeCurrency:
+          type: string
+          example: "btc"
+        quoteQty:
+          type: string
+          example: "3755.0"
+        price:
+          type: string
+          example: "3755000.0"
+        qty:
+          type: string
+          example: "0.001"
+        orderId:
+          type: integer
+          format: int64
+          example: 28
+        side:
+          type: string
+          enum: [buy, sell]
+          example: "buy"
+        isBuyerMaker:
+          type: boolean
+          example: false
+        time:
+          type: integer
+          format: int64
+          example: 1641463132
+
+    Network:
+      type: object
+      properties:
+        coin:
+          type: string
+          example: "btc"
+        depositEnable:
+          type: boolean
+        network:
+          type: string
+          example: "BTC"
+        withdrawEnable:
+          type: boolean
+        withdrawFee:
+          type: string
+          example: "0.0005"
+        withdrawMin:
+          type: string
+          example: "0.001"
+
+    CoinInfo:
+      type: object
+      properties:
+        coin:
+          type: string
+          example: "btc"
+        rapidListed:
+          type: boolean
+        name:
+          type: string
+          example: "Bitcoin"
+        binanceTransferEnable:
+          type: boolean
+        networkList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Network'
+
+    Withdrawal:
+      type: object
+      properties:
+        binanceTransfer:
+          type: boolean
+        address:
+          type: string
+          example: "1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf"
+        amount:
+          type: string
+          example: "0.001"
+        createdAt:
+          type: integer
+          format: int64
+          example: 1641463132
+        lastUpdated:
+          type: integer
+          format: int64
+          example: 1641463132
+        coin:
+          type: string
+          example: "btc"
+        id:
+          type: string
+          example: "abc123"
+        network:
+          type: string
+          example: "BTC"
+        status:
+          type: integer
+          description: "0=Email Sent, 1=Cancelled, 2=Awaiting Approval, 3=Rejected, 4=Processing, 5=Failure, 6=Completed"
+          example: 6
+        transactionFee:
+          type: string
+          example: "0.0005"
+        txId:
+          type: string
+          example: "abc123txhash"
+
+    DepositAddress:
+      type: object
+      properties:
+        address:
+          type: string
+          example: "1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf"
+        coin:
+          type: string
+          example: "btc"
+        tag:
+          type: string
+          nullable: true
+          example: null
+        url:
+          type: string
+          example: "https://blockchain.info/address/1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf"
+
+    AccountInfo:
+      type: object
+      properties:
+        accountType:
+          type: string
+          example: "SPOT"
+        canTrade:
+          type: boolean
+          example: true
+        canWithdraw:
+          type: boolean
+          example: true
+        updateTime:
+          type: integer
+          format: int64
+          example: 1641463132
+
+    Fund:
+      type: object
+      properties:
+        asset:
+          type: string
+          example: "btc"
+        free:
+          type: string
+          example: "0.001"
+        locked:
+          type: string
+          example: "0.0"
+        reservedFee:
+          type: string
+          example: "0.0"
+
+    SubAccountTransfer:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "success"
+        txnId:
+          type: string
+          example: "txn_123"
+
+    SubAccountTransferHistory:
+      type: object
+      properties:
+        asset:
+          type: string
+          example: "btc"
+        from:
+          type: string
+          example: "main@example.com"
+        qty:
+          type: string
+          example: "0.001"
+        status:
+          type: string
+          example: "success"
+        time:
+          type: integer
+          format: int64
+          example: 1641463132
+        to:
+          type: string
+          example: "sub@example.com"
+        txnId:
+          type: string
+          example: "txn_123"
+
+    SubAccountBalance:
+      type: object
+      properties:
+        asset:
+          type: string
+          example: "btc"
+        free:
+          type: string
+          example: "0.001"
+        locked:
+          type: string
+          example: "0.0"
+
+    SubAccount:
+      type: object
+      properties:
+        action:
+          type: string
+          example: "active"
+        balance:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubAccountBalance'
+        created_at:
+          type: integer
+          format: int64
+          example: 1641463132
+        email:
+          type: string
+          example: "sub@example.com"
+        emailVerification:
+          type: boolean
+        portfolio:
+          type: string
+          example: "0.0"
+        status:
+          type: string
+          example: "active"
+
+    AuthToken:
+      type: object
+      properties:
+        auth_key:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiJ9..."
+        timeout_duration:
+          type: integer
+          description: Token validity in seconds
+          example: 900
+
+  parameters:
+    symbol:
+      name: symbol
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Trading pair symbol (e.g., btcinr)
+      example: btcinr
+    symbolOptional:
+      name: symbol
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Trading pair symbol (e.g., btcinr)
+      example: btcinr
+    limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: Number of results to return
+    startTime:
+      name: startTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: Start time in milliseconds
+    endTime:
+      name: endTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: End time in milliseconds
+    timestamp:
+      name: timestamp
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: Current timestamp in milliseconds
+    signature:
+      name: signature
+      in: query
+      required: true
+      schema:
+        type: string
+      description: HMAC SHA256 signature of request parameters
+    recvWindow:
+      name: recvWindow
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+        maximum: 60000
+        default: 5000
+      description: Request validity window in milliseconds (max 60000)
+
+paths:
+  /sapi/v1/ping:
+    get:
+      summary: Test connectivity
+      description: Test connectivity to the REST API
+      operationId: ping
+      tags:
+        - General
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {}
+
+  /sapi/v1/systemStatus:
+    get:
+      summary: System status
+      description: Returns the current system status
+      operationId: getSystemStatus
+      tags:
+        - General
+      responses:
+        '200':
+          description: System status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemStatus'
+
+  /sapi/v1/time:
+    get:
+      summary: Server time
+      description: Test connectivity to the REST API and get the current server time
+      operationId: getServerTime
+      tags:
+        - General
+      responses:
+        '200':
+          description: Server time
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerTime'
+
+  /sapi/v1/exchangeInfo:
+    get:
+      summary: Exchange information
+      description: Returns current exchange trading rules and symbol information
+      operationId: getExchangeInfo
+      tags:
+        - General
+      responses:
+        '200':
+          description: Exchange information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeInfo'
+
+  /sapi/v1/tickers/24hr:
+    get:
+      summary: 24hr tickers for all symbols
+      description: 24 hour rolling window price change statistics for all symbols
+      operationId: getTickers24hr
+      tags:
+        - Market Data
+      responses:
+        '200':
+          description: Array of 24hr ticker statistics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ticker24hr'
+
+  /sapi/v1/ticker/24hr:
+    get:
+      summary: 24hr ticker for a symbol
+      description: 24 hour rolling window price change statistics for a single symbol
+      operationId: getTicker24hr
+      tags:
+        - Market Data
+      parameters:
+        - $ref: '#/components/parameters/symbol'
+      responses:
+        '200':
+          description: 24hr ticker statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticker24hr'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /sapi/v1/klines:
+    get:
+      summary: Kline/Candlestick data
+      description: Kline/candlestick bars for a symbol. Klines are uniquely identified by their open time.
+      operationId: getKlines
+      tags:
+        - Market Data
+      parameters:
+        - $ref: '#/components/parameters/symbol'
+        - name: interval
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [1m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 12h, 1d, 1w]
+          description: Kline interval
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 500
+            maximum: 2000
+          description: Number of klines to return (default 500, max 2000)
+        - $ref: '#/components/parameters/startTime'
+        - $ref: '#/components/parameters/endTime'
+      responses:
+        '200':
+          description: Array of kline data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Kline'
+
+  /sapi/v1/depth:
+    get:
+      summary: Order book depth
+      description: Get order book for a symbol
+      operationId: getOrderBook
+      tags:
+        - Market Data
+      parameters:
+        - $ref: '#/components/parameters/symbol'
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+            maximum: 1000
+            enum: [1, 5, 10, 20, 50, 100, 500, 1000]
+          description: Number of price levels to return (default 20, max 1000)
+      responses:
+        '200':
+          description: Order book depth
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderBook'
+
+  /sapi/v1/trades:
+    get:
+      summary: Recent trades
+      description: Get recent trades on a market. Trades are sorted in latest to oldest (descending) order.
+      operationId: getRecentTrades
+      tags:
+        - Market Data
+      parameters:
+        - $ref: '#/components/parameters/symbol'
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 500
+            maximum: 1000
+          description: Number of trades to return (default 500, max 1000)
+      responses:
+        '200':
+          description: Array of recent trades
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trade'
+
+  /sapi/v1/historicalTrades:
+    get:
+      summary: Historical trades
+      description: Get older market trades. Requires MARKET_DATA permission.
+      operationId: getHistoricalTrades
+      tags:
+        - Market Data
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/symbol'
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 500
+            maximum: 1000
+          description: Number of trades to return (default 500, max 1000)
+        - name: fromId
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: TradeId to fetch from. Default gets most recent trades.
+      responses:
+        '200':
+          description: Array of historical trades
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trade'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /sapi/v1/order:
+    get:
+      summary: Query order
+      description: Check an order's status. Requires USER_DATA permission.
+      operationId: getOrder
+      tags:
+        - Trading
+      security:
+        - ApiKeyAuth: []
+          HmacSignature: []
+      parameters:
+        - name: orderId
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: Order ID (either orderId or clientOrderId required)
+        - name: clientOrderId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Client order ID (either orderId or clientOrderId required)
+        - $ref: '#/components/parameters/recvWindow'
+        - $ref: '#/components/parameters/timestamp'
+        - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Order details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      summary: Place order
+      description: Send in a new order. Requires TRADE permission.
+      operationId: createOrder
+      tags:
+        - Trading
+      security:
+        - ApiKeyAuth: []
+          HmacSignature: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - symbol
+                - side
+                - type
+                - timestamp
+                - signature
+              properties:
+                symbol:
+                  type: string
+                  description: Trading pair symbol
+                  example: btcinr
+                side:
+                  type: string
+                  enum: [buy, sell]
+                  description: Order side
+                type:
+                  type: string
+                  enum: [limit, stop_limit]
+                  description: Order type
+                quantity:
+                  type: string
+                  description: Order quantity (required for limit and stop_limit orders)
+                  example: "0.001"
+                price:
+                  type: string
+                  description: Order price (required for limit and stop_limit orders)
+                  example: "3750000.0"
+                stopPrice:
+                  type: string
+                  description: Stop price (required for stop_limit orders)
+                clientOrderId:
+                  type: string
+                  description: Unique client order identifier
+                recvWindow:
+                  type: integer
+                  format: int64
+                  maximum: 60000
+                  description: Request validity window in milliseconds
+                timestamp:
+                  type: integer
+                  format: int64
+                  description: Current timestamp in milliseconds
+                signature:
+                  type: string
+                  description: HMAC SHA256 signature
+      responses:
+        '200':
+          description: Created order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Cancel order
+      description: Cancel an active order. Requires TRADE permission.
+      operationId: cancelOrder
+      tags:
+        - Trading
+      security:
+        - ApiKeyAuth: []
+          HmacSignature: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - symbol
+                - timestamp
+                - signature
+              properties:
+                symbol:
+                  type: string
+                  description: Trading pair symbol
+                  example: btcinr
+                orderId:
+                  type: integer
+                  format: int64
+                  description: Order ID to cancel (either orderId or clientOrderId required)
+                clientOrderId:
+                  type: string
+                  description: Client order ID to cancel (either orderId or clientOrderId required)
+                recvWindow:
+                  type: integer
+                  format: int64
+                  maximum: 60000
+                timestamp:
+                  type: integer
+                  format: int64
+                signature:
+                  type: string
+      responses:
+        '200':
+          description: Cancelled order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /sapi/v1/order/test:
+    post:
+      summary: Test new order
+      description: Test new order creation. Creates and validates a new order but does not send it to the matching engine.
+      operationId: testOrder
+      tags:
+        - Trading
+      security:
+        - ApiKeyAuth: []
+          HmacSignature: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - symbol
+                - side
+                - type
+                - timestamp
+                - signature
+              properties:
+                symbol:
+                  type: string
+                side:
+                  type: string
+                  enum: [buy, sell]
+                type:
+                  type: string
+                  enum: [limit, stop_limit]
+                quantity:
+                  type: string
+                price:
+                  type: string
+                stopPrice:
+                  type: string
+                clientOrderId:
+                  type: string
+                recvWindow:
+                  type: integer
+                  format: int64
+                timestamp:
+                  type: integer
+                  format: int64
+                signature:
+                  type: string
+      responses:
+        '200':
+          description: Test order validated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {}
+
+  /sapi/v1/openOrders:
+    get:
+      summary: Current open orders
+      description: Get all open orders on a symbol or all symbols. Requires USER_DATA permission.
+      operationId: getOpenOrders
+      tags:
+        - Trading
+      security:
+        - ApiKeyAuth: []
+          HmacSignature: []
+      parameters:
+        - $ref: '#/components/parameters/symbolOptional'
+        - name: orderId
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/startTime'
+        - $ref: '#/components/parameters/endTime'
+        - $ref: '#/components/parameters/recvWindow'
+        - $ref: '#/components/parameters/timestamp'
+        - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Array of open orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+
+    delete:
+      summary: Cancel all open orders on a symbol
+      description: Cancels all active orders on a symbol. Requires TRADE permission.
+      operationId: cancelAllOpenOrders
+      tags:
+        - Trading
+      security:
+        - ApiKeyAuth: []
+          HmacSignature: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - symbol
+                - timestamp
+                - signature
+              properties:
+                symbol:
+                  type: string
+                  description: Trading pair symbol
+                recvWindow:
+                  type: integer
+                  format: int64
+                timestamp:
+                  type: integer
+                  format: int64
+                signature:
+                  type: string
+      responses:
+        '200':
+          description: Array of cancelled orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+
+  /sapi/v1/allOrders:
+    get:
+      summary: All orders
+      description: Get all account orders (active, cancelled, or filled). Requires USER_DATA permission.
+      operationId: getAllOrders
+      tags:
+        - Trading
+      security:
+        - ApiKeyAuth: []
+          HmacSignature: []
+      parameters:
+        - $ref: '#/components/parameters/symbol'
+        - name: orderId
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: If set, return orders >= orderId. Otherwise, return most recent orders.
+        - $ref: '#/components/parameters/startTime'
+        - $ref: '#/components/parameters/endTime'
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 500
+            maximum: 1000
+          description: Number of orders to return (default 500, max 1000)
+        - $ref: '#/components/parameters/recvWindow'
+        - $ref: '#/components/parameters/timestamp'
+        - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Array of all orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+
+  /sapi/v1/myTrades:
+    get:
+      summary: Account trade list
+      description: Get trades for a specific account and symbol. Requires TRADE permission.
+      operationId: getMyTrades
+      tags:
+        - Trading
+      security:
+        - ApiKeyAuth: []
+          HmacSignature: []
+      parameters:
+        - $ref: '#/components/parameters/symbolOptional'
+        - name: orderId
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: Filter trades by order ID (either orderId or fromId can be set)
+        - name: fromId
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: TradeId to fetch from (either orderId or fromId can be set)
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 500
+            maximum: 1000
+        - $ref: '#/components/parameters/startTime'
+        - $ref: '#/components/parameters/endTime'
+        - $ref: '#/components/parameters/recvWindow'
+        - $ref: '#/components/parameters/timestamp'
+        - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Array of trades
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MyTrade'
+
+  /sapi/v1/coins:
+    get:
+      summary: Coin information
+      description: Get information of coins (available for deposit and withdraw) for user. Requires USER_DATA permission.
+      operationId: getCoins
+      tags:
+        - Wallet
+      security:
+        - ApiKeyAuth: []
+          HmacSignature: []
+      parameters:
+        - $ref: '#/components/parameters/recvWindow'
+        - $ref: '#/components/parameters/timestamp'
+        - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Array of coin information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CoinInfo'
+
+  /sapi/v1/crypto/withdraws:
+    get:
+      summary: Withdrawal history
+      description: Fetch withdrawal history. Requires USER_DATA permission.
+      operationId: getWithdrawals
+      tags:
+        - Wallet
+      security:
+        - ApiKeyAuth: []
+          HmacSignature: []
+      parameters:
+        - name: coin
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Coin symbol filter
+        - name: transferType
+          in: query
+          required: false
+          schema:
+            type: integer
+            enum: [1, 2]
+          description: "Transfer type: 1=on-chain, 2=Binance transfer"
+        - name: withdrawOrderId
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: "0=Email Sent, 1=Cancelled, 2=Awaiting Approval, 3=Rejected, 4=Processing, 5=Failure, 6=Completed"
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 100
+            maximum: 1000
+        - $ref: '#/components/parameters/startTime'
+        - $ref: '#/components/parameters/endTime'
+        - $ref: '#/components/parameters/recvWindow'
+        - $ref: '#/components/parameters/timestamp'
+        - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Array of withdrawals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Withdrawal'
+
+  /sapi/v1/crypto/deposits/address:
+    get:
+      summary: Deposit address
+      description: Fetch deposit address with network. Requires USER_DATA permission.
+      operationId: getDepositAddress
+      tags:
+        - Wallet
+      security:
+        - ApiKeyAuth: []
+          HmacSignature: []
+      parameters:
+        - name: coin
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Coin symbol
+          example: btc
+        - name: network
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Network name
+          example: BTC
+        - $ref: '#/components/parameters/recvWindow'
+        - $ref: '#/components/parameters/timestamp'
+        - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Deposit address information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepositAddress'
+
+  /sapi/v1/account:
+    get:
+      summary: Account information
+      description: Get current account information. Requires USER_DATA permission.
+      operationId: getAccount
+      tags:
+        - Account
+      security:
+        - ApiKeyAuth: []
+          HmacSignature: []
+      parameters:
+        - $ref: '#/components/parameters/recvWindow'
+        - $ref: '#/components/parameters/timestamp'
+        - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Account information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountInfo'
+
+  /sapi/v1/funds:
+    get:
+      summary: Fund details
+      description: Get current fund balances. Requires USER_DATA permission.
+      operationId: getFunds
+      tags:
+        - Account
+      security:
+        - ApiKeyAuth: []
+          HmacSignature: []
+      parameters:
+        - $ref: '#/components/parameters/recvWindow'
+        - $ref: '#/components/parameters/timestamp'
+        - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Array of fund balances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Fund'
+
+  /sapi/v1/sub_account/fund_transfer:
+    post:
+      summary: Sub-account fund transfer
+      description: Transfer funds between accounts. Requires TRADE permission.
+      operationId: subAccountFundTransfer
+      tags:
+        - Sub-Account
+      security:
+        - ApiKeyAuth: []
+          HmacSignature: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - currency
+                - amount
+                - fromEmail
+                - toEmail
+                - timestamp
+                - signature
+              properties:
+                currency:
+                  type: string
+                  description: Coin/currency to transfer
+                  example: btc
+                amount:
+                  type: string
+                  description: Amount to transfer
+                  example: "0.001"
+                fromEmail:
+                  type: string
+                  description: Source account email
+                toEmail:
+                  type: string
+                  description: Destination account email
+                recvWindow:
+                  type: integer
+                  format: int64
+                timestamp:
+                  type: integer
+                  format: int64
+                signature:
+                  type: string
+      responses:
+        '200':
+          description: Transfer result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubAccountTransfer'
+
+  /sapi/v1/sub_account/fund_transfer/history:
+    get:
+      summary: Sub-account fund transfer history
+      description: Get sub-account fund transfer history. Requires USER_DATA permission.
+      operationId: getSubAccountFundTransferHistory
+      tags:
+        - Sub-Account
+      security:
+        - ApiKeyAuth: []
+          HmacSignature: []
+      parameters:
+        - $ref: '#/components/parameters/recvWindow'
+        - $ref: '#/components/parameters/timestamp'
+        - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Array of fund transfer history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubAccountTransferHistory'
+
+  /sapi/v1/sub_account/accounts:
+    get:
+      summary: Sub-account details
+      description: Get sub-account details including balances. Requires USER_DATA permission.
+      operationId: getSubAccounts
+      tags:
+        - Sub-Account
+      security:
+        - ApiKeyAuth: []
+          HmacSignature: []
+      parameters:
+        - $ref: '#/components/parameters/recvWindow'
+        - $ref: '#/components/parameters/timestamp'
+        - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: Array of sub-account details
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubAccount'
+
+  /sapi/v1/create_auth_token:
+    post:
+      summary: Create WebSocket auth token
+      description: Create an authentication token for WebSocket private streams. Requires USER_DATA permission.
+      operationId: createAuthToken
+      tags:
+        - WebSocket
+      security:
+        - ApiKeyAuth: []
+          HmacSignature: []
+      requestBody:
+        required: false
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - timestamp
+                - signature
+              properties:
+                recvWindow:
+                  type: integer
+                  format: int64
+                timestamp:
+                  type: integer
+                  format: int64
+                signature:
+                  type: string
+      responses:
+        '200':
+          description: Auth token for WebSocket connections
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+
+tags:
+  - name: General
+    description: General API endpoints for connectivity and system information
+  - name: Market Data
+    description: Public market data endpoints for price, volume, and order book information
+  - name: Trading
+    description: Authenticated endpoints for order management and trade history
+  - name: Wallet
+    description: Authenticated endpoints for coin and withdrawal/deposit management
+  - name: Account
+    description: Authenticated endpoints for account information and balances
+  - name: Sub-Account
+    description: Authenticated endpoints for sub-account management and fund transfers
+  - name: WebSocket
+    description: Endpoints for WebSocket authentication token generation
