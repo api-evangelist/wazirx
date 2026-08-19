@@ -1,0 +1,511 @@
+{
+  "item": [
+    {
+      "id": "2a53f784-1400-4da3-bd41-de2a468e82ba",
+      "name": "Sub-Account",
+      "description": {
+        "content": "Authenticated endpoints for sub-account management and fund transfers",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7f924f0c-face-4de1-8b90-b17b4f811d8e",
+          "name": "Sub-account fund transfer",
+          "request": {
+            "name": "Sub-account fund transfer",
+            "description": {
+              "content": "Transfer funds between accounts. Requires TRADE permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "sapi",
+                "v1",
+                "sub_account",
+                "fund_transfer"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-API-KEY"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "currency",
+                  "value": "<string>",
+                  "description": "(Required) Coin/currency to transfer"
+                },
+                {
+                  "disabled": false,
+                  "key": "amount",
+                  "value": "<string>",
+                  "description": "(Required) Amount to transfer"
+                },
+                {
+                  "disabled": false,
+                  "key": "fromEmail",
+                  "value": "<string>",
+                  "description": "(Required) Source account email"
+                },
+                {
+                  "disabled": false,
+                  "key": "toEmail",
+                  "value": "<string>",
+                  "description": "(Required) Destination account email"
+                },
+                {
+                  "disabled": false,
+                  "key": "timestamp",
+                  "value": "<long>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "signature",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "recvWindow",
+                  "value": "<long>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "951b6267-58ea-44e2-b5be-3724040de41a",
+              "name": "Transfer result",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "sapi",
+                    "v1",
+                    "sub_account",
+                    "fund_transfer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Coin/currency to transfer",
+                        "type": "text/plain"
+                      },
+                      "key": "currency",
+                      "value": "btc"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Amount to transfer",
+                        "type": "text/plain"
+                      },
+                      "key": "amount",
+                      "value": "0.001"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Source account email",
+                        "type": "text/plain"
+                      },
+                      "key": "fromEmail",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Destination account email",
+                        "type": "text/plain"
+                      },
+                      "key": "toEmail",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "timestamp",
+                      "value": "<long>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "signature",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "recvWindow",
+                      "value": "<long>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"success\",\n  \"txnId\": \"txn_123\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d63d76f2-e77c-41cc-aa52-11cb1dca3d01",
+          "name": "Sub-account fund transfer history",
+          "request": {
+            "name": "Sub-account fund transfer history",
+            "description": {
+              "content": "Get sub-account fund transfer history. Requires USER_DATA permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "sapi",
+                "v1",
+                "sub_account",
+                "fund_transfer",
+                "history"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "recvWindow",
+                  "value": "5000",
+                  "description": "Request validity window in milliseconds (max 60000)"
+                },
+                {
+                  "disabled": false,
+                  "key": "timestamp",
+                  "value": "<long>",
+                  "description": "(Required) Current timestamp in milliseconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "signature",
+                  "value": "<string>",
+                  "description": "(Required) HMAC SHA256 signature of request parameters"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-API-KEY"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "47846f14-d76f-4ffb-9f9a-778482ecfffe",
+              "name": "Array of fund transfer history",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "sapi",
+                    "v1",
+                    "sub_account",
+                    "fund_transfer",
+                    "history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "recvWindow",
+                      "value": "5000"
+                    },
+                    {
+                      "key": "timestamp",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "signature",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"asset\": \"btc\",\n    \"from\": \"main@example.com\",\n    \"qty\": \"0.001\",\n    \"status\": \"success\",\n    \"time\": 1641463132,\n    \"to\": \"sub@example.com\",\n    \"txnId\": \"txn_123\"\n  },\n  {\n    \"asset\": \"btc\",\n    \"from\": \"main@example.com\",\n    \"qty\": \"0.001\",\n    \"status\": \"success\",\n    \"time\": 1641463132,\n    \"to\": \"sub@example.com\",\n    \"txnId\": \"txn_123\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "76ce9678-4fd6-43d0-a0e6-d6d3391d0603",
+          "name": "Sub-account details",
+          "request": {
+            "name": "Sub-account details",
+            "description": {
+              "content": "Get sub-account details including balances. Requires USER_DATA permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "sapi",
+                "v1",
+                "sub_account",
+                "accounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "recvWindow",
+                  "value": "5000",
+                  "description": "Request validity window in milliseconds (max 60000)"
+                },
+                {
+                  "disabled": false,
+                  "key": "timestamp",
+                  "value": "<long>",
+                  "description": "(Required) Current timestamp in milliseconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "signature",
+                  "value": "<string>",
+                  "description": "(Required) HMAC SHA256 signature of request parameters"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-API-KEY"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a1e2e7df-2364-4662-83a7-bb6eea006cbf",
+              "name": "Array of sub-account details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "sapi",
+                    "v1",
+                    "sub_account",
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "recvWindow",
+                      "value": "5000"
+                    },
+                    {
+                      "key": "timestamp",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "signature",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"action\": \"active\",\n    \"balance\": [\n      {\n        \"asset\": \"btc\",\n        \"free\": \"0.001\",\n        \"locked\": \"0.0\"\n      },\n      {\n        \"asset\": \"btc\",\n        \"free\": \"0.001\",\n        \"locked\": \"0.0\"\n      }\n    ],\n    \"created_at\": 1641463132,\n    \"email\": \"sub@example.com\",\n    \"emailVerification\": true,\n    \"portfolio\": \"0.0\",\n    \"status\": \"active\"\n  },\n  {\n    \"action\": \"active\",\n    \"balance\": [\n      {\n        \"asset\": \"btc\",\n        \"free\": \"0.001\",\n        \"locked\": \"0.0\"\n      },\n      {\n        \"asset\": \"btc\",\n        \"free\": \"0.001\",\n        \"locked\": \"0.0\"\n      }\n    ],\n    \"created_at\": 1641463132,\n    \"email\": \"sub@example.com\",\n    \"emailVerification\": true,\n    \"portfolio\": \"0.0\",\n    \"status\": \"active\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.wazirx.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "d9a33086-e0f5-4c94-b2eb-334a2fcb2ce0",
+    "name": "WazirX REST Account Sub-Account API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.\n\n\nContact Support:\n Name: WazirX API Support\n Email: api@wazirx.com",
+      "type": "text/plain"
+    }
+  }
+}

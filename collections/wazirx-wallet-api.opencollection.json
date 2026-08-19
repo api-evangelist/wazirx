@@ -1,0 +1,186 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "WazirX REST Account Wallet API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Wallet",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Coin information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wazirx.com/sapi/v1/coins",
+            "params": [
+              {
+                "name": "recvWindow",
+                "value": "",
+                "type": "query",
+                "description": "Request validity window in milliseconds (max 60000)"
+              },
+              {
+                "name": "timestamp",
+                "value": "",
+                "type": "query",
+                "description": "Current timestamp in milliseconds"
+              },
+              {
+                "name": "signature",
+                "value": "",
+                "type": "query",
+                "description": "HMAC SHA256 signature of request parameters"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get information of coins (available for deposit and withdraw) for user. Requires USER_DATA permission."
+        },
+        {
+          "info": {
+            "name": "Withdrawal history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wazirx.com/sapi/v1/crypto/withdraws",
+            "params": [
+              {
+                "name": "coin",
+                "value": "",
+                "type": "query",
+                "description": "Coin symbol filter"
+              },
+              {
+                "name": "transferType",
+                "value": "",
+                "type": "query",
+                "description": "Transfer type: 1=on-chain, 2=Binance transfer"
+              },
+              {
+                "name": "withdrawOrderId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "0=Email Sent, 1=Cancelled, 2=Awaiting Approval, 3=Rejected, 4=Processing, 5=Failure, 6=Completed"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "startTime",
+                "value": "",
+                "type": "query",
+                "description": "Start time in milliseconds"
+              },
+              {
+                "name": "endTime",
+                "value": "",
+                "type": "query",
+                "description": "End time in milliseconds"
+              },
+              {
+                "name": "recvWindow",
+                "value": "",
+                "type": "query",
+                "description": "Request validity window in milliseconds (max 60000)"
+              },
+              {
+                "name": "timestamp",
+                "value": "",
+                "type": "query",
+                "description": "Current timestamp in milliseconds"
+              },
+              {
+                "name": "signature",
+                "value": "",
+                "type": "query",
+                "description": "HMAC SHA256 signature of request parameters"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Fetch withdrawal history. Requires USER_DATA permission."
+        },
+        {
+          "info": {
+            "name": "Deposit address",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wazirx.com/sapi/v1/crypto/deposits/address",
+            "params": [
+              {
+                "name": "coin",
+                "value": "btc",
+                "type": "query",
+                "description": "Coin symbol"
+              },
+              {
+                "name": "network",
+                "value": "BTC",
+                "type": "query",
+                "description": "Network name"
+              },
+              {
+                "name": "recvWindow",
+                "value": "",
+                "type": "query",
+                "description": "Request validity window in milliseconds (max 60000)"
+              },
+              {
+                "name": "timestamp",
+                "value": "",
+                "type": "query",
+                "description": "Current timestamp in milliseconds"
+              },
+              {
+                "name": "signature",
+                "value": "",
+                "type": "query",
+                "description": "HMAC SHA256 signature of request parameters"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Fetch deposit address with network. Requires USER_DATA permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

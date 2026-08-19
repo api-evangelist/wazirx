@@ -1,0 +1,525 @@
+{
+  "item": [
+    {
+      "id": "8a480647-c59d-427e-a36d-32e1508b1c08",
+      "name": "Wallet",
+      "description": {
+        "content": "Authenticated endpoints for coin and withdrawal/deposit management",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bbae9e9d-e59a-4df2-bab6-0bec7449f014",
+          "name": "Coin information",
+          "request": {
+            "name": "Coin information",
+            "description": {
+              "content": "Get information of coins (available for deposit and withdraw) for user. Requires USER_DATA permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "sapi",
+                "v1",
+                "coins"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "recvWindow",
+                  "value": "5000",
+                  "description": "Request validity window in milliseconds (max 60000)"
+                },
+                {
+                  "disabled": false,
+                  "key": "timestamp",
+                  "value": "<long>",
+                  "description": "(Required) Current timestamp in milliseconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "signature",
+                  "value": "<string>",
+                  "description": "(Required) HMAC SHA256 signature of request parameters"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-API-KEY"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "af948fa1-cca4-4ccb-8980-584d22247a2b",
+              "name": "Array of coin information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "sapi",
+                    "v1",
+                    "coins"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "recvWindow",
+                      "value": "5000"
+                    },
+                    {
+                      "key": "timestamp",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "signature",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"coin\": \"btc\",\n    \"rapidListed\": false,\n    \"name\": \"Bitcoin\",\n    \"binanceTransferEnable\": true,\n    \"networkList\": [\n      {\n        \"coin\": \"btc\",\n        \"depositEnable\": true,\n        \"network\": \"BTC\",\n        \"withdrawEnable\": false,\n        \"withdrawFee\": \"0.0005\",\n        \"withdrawMin\": \"0.001\"\n      },\n      {\n        \"coin\": \"btc\",\n        \"depositEnable\": false,\n        \"network\": \"BTC\",\n        \"withdrawEnable\": false,\n        \"withdrawFee\": \"0.0005\",\n        \"withdrawMin\": \"0.001\"\n      }\n    ]\n  },\n  {\n    \"coin\": \"btc\",\n    \"rapidListed\": true,\n    \"name\": \"Bitcoin\",\n    \"binanceTransferEnable\": true,\n    \"networkList\": [\n      {\n        \"coin\": \"btc\",\n        \"depositEnable\": true,\n        \"network\": \"BTC\",\n        \"withdrawEnable\": true,\n        \"withdrawFee\": \"0.0005\",\n        \"withdrawMin\": \"0.001\"\n      },\n      {\n        \"coin\": \"btc\",\n        \"depositEnable\": false,\n        \"network\": \"BTC\",\n        \"withdrawEnable\": false,\n        \"withdrawFee\": \"0.0005\",\n        \"withdrawMin\": \"0.001\"\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4719b954-021d-447f-9c85-1ab183bb19d0",
+          "name": "Withdrawal history",
+          "request": {
+            "name": "Withdrawal history",
+            "description": {
+              "content": "Fetch withdrawal history. Requires USER_DATA permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "sapi",
+                "v1",
+                "crypto",
+                "withdraws"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "coin",
+                  "value": "<string>",
+                  "description": "Coin symbol filter"
+                },
+                {
+                  "disabled": false,
+                  "key": "transferType",
+                  "value": "<integer>",
+                  "description": "Transfer type: 1=on-chain, 2=Binance transfer"
+                },
+                {
+                  "disabled": false,
+                  "key": "withdrawOrderId",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<integer>",
+                  "description": "0=Email Sent, 1=Cancelled, 2=Awaiting Approval, 3=Rejected, 4=Processing, 5=Failure, 6=Completed"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100"
+                },
+                {
+                  "disabled": false,
+                  "key": "startTime",
+                  "value": "<long>",
+                  "description": "Start time in milliseconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "endTime",
+                  "value": "<long>",
+                  "description": "End time in milliseconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "recvWindow",
+                  "value": "5000",
+                  "description": "Request validity window in milliseconds (max 60000)"
+                },
+                {
+                  "disabled": false,
+                  "key": "timestamp",
+                  "value": "<long>",
+                  "description": "(Required) Current timestamp in milliseconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "signature",
+                  "value": "<string>",
+                  "description": "(Required) HMAC SHA256 signature of request parameters"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-API-KEY"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "12ebee77-62b6-4a1e-91a7-455403cc793e",
+              "name": "Array of withdrawals",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "sapi",
+                    "v1",
+                    "crypto",
+                    "withdraws"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "coin",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transferType",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "withdrawOrderId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "startTime",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "endTime",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "recvWindow",
+                      "value": "5000"
+                    },
+                    {
+                      "key": "timestamp",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "signature",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"binanceTransfer\": false,\n    \"address\": \"1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf\",\n    \"amount\": \"0.001\",\n    \"createdAt\": 1641463132,\n    \"lastUpdated\": 1641463132,\n    \"coin\": \"btc\",\n    \"id\": \"abc123\",\n    \"network\": \"BTC\",\n    \"status\": 6,\n    \"transactionFee\": \"0.0005\",\n    \"txId\": \"abc123txhash\"\n  },\n  {\n    \"binanceTransfer\": true,\n    \"address\": \"1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf\",\n    \"amount\": \"0.001\",\n    \"createdAt\": 1641463132,\n    \"lastUpdated\": 1641463132,\n    \"coin\": \"btc\",\n    \"id\": \"abc123\",\n    \"network\": \"BTC\",\n    \"status\": 6,\n    \"transactionFee\": \"0.0005\",\n    \"txId\": \"abc123txhash\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1157db26-9d96-435f-8a8c-1268b29c521b",
+          "name": "Deposit address",
+          "request": {
+            "name": "Deposit address",
+            "description": {
+              "content": "Fetch deposit address with network. Requires USER_DATA permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "sapi",
+                "v1",
+                "crypto",
+                "deposits",
+                "address"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "coin",
+                  "value": "<string>",
+                  "description": "(Required) Coin symbol"
+                },
+                {
+                  "disabled": false,
+                  "key": "network",
+                  "value": "<string>",
+                  "description": "(Required) Network name"
+                },
+                {
+                  "disabled": false,
+                  "key": "recvWindow",
+                  "value": "5000",
+                  "description": "Request validity window in milliseconds (max 60000)"
+                },
+                {
+                  "disabled": false,
+                  "key": "timestamp",
+                  "value": "<long>",
+                  "description": "(Required) Current timestamp in milliseconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "signature",
+                  "value": "<string>",
+                  "description": "(Required) HMAC SHA256 signature of request parameters"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-API-KEY"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "8ab823aa-fe3e-45ac-9aeb-158da315835f",
+              "name": "Deposit address information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "sapi",
+                    "v1",
+                    "crypto",
+                    "deposits",
+                    "address"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "coin",
+                      "value": "btc"
+                    },
+                    {
+                      "key": "network",
+                      "value": "BTC"
+                    },
+                    {
+                      "key": "recvWindow",
+                      "value": "5000"
+                    },
+                    {
+                      "key": "timestamp",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "signature",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"address\": \"1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf\",\n  \"coin\": \"btc\",\n  \"tag\": null,\n  \"url\": \"https://blockchain.info/address/1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.wazirx.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "0ffed9fa-1188-420b-8289-2b45fdbe3008",
+    "name": "WazirX REST Account Wallet API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.\n\n\nContact Support:\n Name: WazirX API Support\n Email: api@wazirx.com",
+      "type": "text/plain"
+    }
+  }
+}

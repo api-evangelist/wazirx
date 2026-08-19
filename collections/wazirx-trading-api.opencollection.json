@@ -1,0 +1,474 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "WazirX REST Account Trading API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Trading",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Query order",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wazirx.com/sapi/v1/order",
+            "params": [
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "query",
+                "description": "Order ID (either orderId or clientOrderId required)"
+              },
+              {
+                "name": "clientOrderId",
+                "value": "",
+                "type": "query",
+                "description": "Client order ID (either orderId or clientOrderId required)"
+              },
+              {
+                "name": "recvWindow",
+                "value": "",
+                "type": "query",
+                "description": "Request validity window in milliseconds (max 60000)"
+              },
+              {
+                "name": "timestamp",
+                "value": "",
+                "type": "query",
+                "description": "Current timestamp in milliseconds"
+              },
+              {
+                "name": "signature",
+                "value": "",
+                "type": "query",
+                "description": "HMAC SHA256 signature of request parameters"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Check an order's status. Requires USER_DATA permission."
+        },
+        {
+          "info": {
+            "name": "Place order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wazirx.com/sapi/v1/order",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "symbol",
+                  "value": ""
+                },
+                {
+                  "name": "side",
+                  "value": ""
+                },
+                {
+                  "name": "type",
+                  "value": ""
+                },
+                {
+                  "name": "quantity",
+                  "value": ""
+                },
+                {
+                  "name": "price",
+                  "value": ""
+                },
+                {
+                  "name": "stopPrice",
+                  "value": ""
+                },
+                {
+                  "name": "clientOrderId",
+                  "value": ""
+                },
+                {
+                  "name": "recvWindow",
+                  "value": ""
+                },
+                {
+                  "name": "timestamp",
+                  "value": ""
+                },
+                {
+                  "name": "signature",
+                  "value": ""
+                }
+              ]
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Send in a new order. Requires TRADE permission."
+        },
+        {
+          "info": {
+            "name": "Cancel order",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.wazirx.com/sapi/v1/order",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "symbol",
+                  "value": ""
+                },
+                {
+                  "name": "orderId",
+                  "value": ""
+                },
+                {
+                  "name": "clientOrderId",
+                  "value": ""
+                },
+                {
+                  "name": "recvWindow",
+                  "value": ""
+                },
+                {
+                  "name": "timestamp",
+                  "value": ""
+                },
+                {
+                  "name": "signature",
+                  "value": ""
+                }
+              ]
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Cancel an active order. Requires TRADE permission."
+        },
+        {
+          "info": {
+            "name": "Test new order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wazirx.com/sapi/v1/order/test",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "symbol",
+                  "value": ""
+                },
+                {
+                  "name": "side",
+                  "value": ""
+                },
+                {
+                  "name": "type",
+                  "value": ""
+                },
+                {
+                  "name": "quantity",
+                  "value": ""
+                },
+                {
+                  "name": "price",
+                  "value": ""
+                },
+                {
+                  "name": "stopPrice",
+                  "value": ""
+                },
+                {
+                  "name": "clientOrderId",
+                  "value": ""
+                },
+                {
+                  "name": "recvWindow",
+                  "value": ""
+                },
+                {
+                  "name": "timestamp",
+                  "value": ""
+                },
+                {
+                  "name": "signature",
+                  "value": ""
+                }
+              ]
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Test new order creation. Creates and validates a new order but does not send it to the matching engine."
+        },
+        {
+          "info": {
+            "name": "Current open orders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wazirx.com/sapi/v1/openOrders",
+            "params": [
+              {
+                "name": "symbol",
+                "value": "btcinr",
+                "type": "query",
+                "description": "Trading pair symbol (e.g., btcinr)"
+              },
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "startTime",
+                "value": "",
+                "type": "query",
+                "description": "Start time in milliseconds"
+              },
+              {
+                "name": "endTime",
+                "value": "",
+                "type": "query",
+                "description": "End time in milliseconds"
+              },
+              {
+                "name": "recvWindow",
+                "value": "",
+                "type": "query",
+                "description": "Request validity window in milliseconds (max 60000)"
+              },
+              {
+                "name": "timestamp",
+                "value": "",
+                "type": "query",
+                "description": "Current timestamp in milliseconds"
+              },
+              {
+                "name": "signature",
+                "value": "",
+                "type": "query",
+                "description": "HMAC SHA256 signature of request parameters"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all open orders on a symbol or all symbols. Requires USER_DATA permission."
+        },
+        {
+          "info": {
+            "name": "Cancel all open orders on a symbol",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.wazirx.com/sapi/v1/openOrders",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "symbol",
+                  "value": ""
+                },
+                {
+                  "name": "recvWindow",
+                  "value": ""
+                },
+                {
+                  "name": "timestamp",
+                  "value": ""
+                },
+                {
+                  "name": "signature",
+                  "value": ""
+                }
+              ]
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Cancels all active orders on a symbol. Requires TRADE permission."
+        },
+        {
+          "info": {
+            "name": "All orders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wazirx.com/sapi/v1/allOrders",
+            "params": [
+              {
+                "name": "symbol",
+                "value": "btcinr",
+                "type": "query",
+                "description": "Trading pair symbol (e.g., btcinr)"
+              },
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "query",
+                "description": "If set, return orders >= orderId. Otherwise, return most recent orders."
+              },
+              {
+                "name": "startTime",
+                "value": "",
+                "type": "query",
+                "description": "Start time in milliseconds"
+              },
+              {
+                "name": "endTime",
+                "value": "",
+                "type": "query",
+                "description": "End time in milliseconds"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of orders to return (default 500, max 1000)"
+              },
+              {
+                "name": "recvWindow",
+                "value": "",
+                "type": "query",
+                "description": "Request validity window in milliseconds (max 60000)"
+              },
+              {
+                "name": "timestamp",
+                "value": "",
+                "type": "query",
+                "description": "Current timestamp in milliseconds"
+              },
+              {
+                "name": "signature",
+                "value": "",
+                "type": "query",
+                "description": "HMAC SHA256 signature of request parameters"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all account orders (active, cancelled, or filled). Requires USER_DATA permission."
+        },
+        {
+          "info": {
+            "name": "Account trade list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wazirx.com/sapi/v1/myTrades",
+            "params": [
+              {
+                "name": "symbol",
+                "value": "btcinr",
+                "type": "query",
+                "description": "Trading pair symbol (e.g., btcinr)"
+              },
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "query",
+                "description": "Filter trades by order ID (either orderId or fromId can be set)"
+              },
+              {
+                "name": "fromId",
+                "value": "",
+                "type": "query",
+                "description": "TradeId to fetch from (either orderId or fromId can be set)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "startTime",
+                "value": "",
+                "type": "query",
+                "description": "Start time in milliseconds"
+              },
+              {
+                "name": "endTime",
+                "value": "",
+                "type": "query",
+                "description": "End time in milliseconds"
+              },
+              {
+                "name": "recvWindow",
+                "value": "",
+                "type": "query",
+                "description": "Request validity window in milliseconds (max 60000)"
+              },
+              {
+                "name": "timestamp",
+                "value": "",
+                "type": "query",
+                "description": "Current timestamp in milliseconds"
+              },
+              {
+                "name": "signature",
+                "value": "",
+                "type": "query",
+                "description": "HMAC SHA256 signature of request parameters"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get trades for a specific account and symbol. Requires TRADE permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

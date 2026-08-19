@@ -1,0 +1,62 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "WazirX REST Account General API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "General",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Test connectivity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wazirx.com/sapi/v1/ping"
+          },
+          "docs": "Test connectivity to the REST API"
+        },
+        {
+          "info": {
+            "name": "System status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wazirx.com/sapi/v1/systemStatus"
+          },
+          "docs": "Returns the current system status"
+        },
+        {
+          "info": {
+            "name": "Server time",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wazirx.com/sapi/v1/time"
+          },
+          "docs": "Test connectivity to the REST API and get the current server time"
+        },
+        {
+          "info": {
+            "name": "Exchange information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wazirx.com/sapi/v1/exchangeInfo"
+          },
+          "docs": "Returns current exchange trading rules and symbol information"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,178 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "WazirX REST Account Market Data API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Market Data",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "24hr tickers for all symbols",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wazirx.com/sapi/v1/tickers/24hr"
+          },
+          "docs": "24 hour rolling window price change statistics for all symbols"
+        },
+        {
+          "info": {
+            "name": "24hr ticker for a symbol",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wazirx.com/sapi/v1/ticker/24hr",
+            "params": [
+              {
+                "name": "symbol",
+                "value": "btcinr",
+                "type": "query",
+                "description": "Trading pair symbol (e.g., btcinr)"
+              }
+            ]
+          },
+          "docs": "24 hour rolling window price change statistics for a single symbol"
+        },
+        {
+          "info": {
+            "name": "Kline/Candlestick data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wazirx.com/sapi/v1/klines",
+            "params": [
+              {
+                "name": "symbol",
+                "value": "btcinr",
+                "type": "query",
+                "description": "Trading pair symbol (e.g., btcinr)"
+              },
+              {
+                "name": "interval",
+                "value": "",
+                "type": "query",
+                "description": "Kline interval"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of klines to return (default 500, max 2000)"
+              },
+              {
+                "name": "startTime",
+                "value": "",
+                "type": "query",
+                "description": "Start time in milliseconds"
+              },
+              {
+                "name": "endTime",
+                "value": "",
+                "type": "query",
+                "description": "End time in milliseconds"
+              }
+            ]
+          },
+          "docs": "Kline/candlestick bars for a symbol. Klines are uniquely identified by their open time."
+        },
+        {
+          "info": {
+            "name": "Order book depth",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wazirx.com/sapi/v1/depth",
+            "params": [
+              {
+                "name": "symbol",
+                "value": "btcinr",
+                "type": "query",
+                "description": "Trading pair symbol (e.g., btcinr)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of price levels to return (default 20, max 1000)"
+              }
+            ]
+          },
+          "docs": "Get order book for a symbol"
+        },
+        {
+          "info": {
+            "name": "Recent trades",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wazirx.com/sapi/v1/trades",
+            "params": [
+              {
+                "name": "symbol",
+                "value": "btcinr",
+                "type": "query",
+                "description": "Trading pair symbol (e.g., btcinr)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of trades to return (default 500, max 1000)"
+              }
+            ]
+          },
+          "docs": "Get recent trades on a market. Trades are sorted in latest to oldest (descending) order."
+        },
+        {
+          "info": {
+            "name": "Historical trades",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wazirx.com/sapi/v1/historicalTrades",
+            "params": [
+              {
+                "name": "symbol",
+                "value": "btcinr",
+                "type": "query",
+                "description": "Trading pair symbol (e.g., btcinr)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of trades to return (default 500, max 1000)"
+              },
+              {
+                "name": "fromId",
+                "value": "",
+                "type": "query",
+                "description": "TradeId to fetch from. Default gets most recent trades."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get older market trades. Requires MARKET_DATA permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
