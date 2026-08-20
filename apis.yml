@@ -38,6 +38,13 @@ apis:
   baseURL: wss://stream.wazirx.com/stream
   tags:
   - WebSocket
+  - Real-Time
+  - Streaming
+  - Market Data
+  - Trades
+  - Order Book
+  tags_raw:
+  - WebSocket
   - Real-time
   - Streaming
   - Market Data
@@ -88,7 +95,8 @@ apis:
   description: General API endpoints for connectivity and system information
   humanURL: https://docs.wazirx.com/
   baseURL: https://api.wazirx.com
-  tags:
+  tags: []
+  tags_raw:
   - General
   properties:
   - type: OpenAPI
@@ -201,6 +209,8 @@ apis:
   humanURL: https://docs.wazirx.com/
   baseURL: https://api.wazirx.com
   tags:
+  - Wallets
+  tags_raw:
   - Wallet
   properties:
   - type: OpenAPI
