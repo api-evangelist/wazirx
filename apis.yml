@@ -54,7 +54,7 @@ apis:
   - Real-Time
   - Streaming
   - Market Data
-  - Trades
+  - Trade
   - Order Book
   tags_raw:
   - WebSocket
@@ -166,6 +166,8 @@ apis:
   humanURL: https://docs.wazirx.com/
   baseURL: https://api.wazirx.com
   tags:
+  - Sub Account
+  tags_raw:
   - Sub-Account
   properties:
   - type: OpenAPI
