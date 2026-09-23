@@ -1,9 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: WazirX REST Account Trading API
-  description: 'WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.
-
-    '
+  title: WazirX REST Trading API
+  description: WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.
   version: 1.0.0
   contact:
     name: WazirX API Support
@@ -421,6 +419,29 @@ paths:
                   $ref: '#/components/schemas/MyTrade'
 components:
   parameters:
+    signature:
+      name: signature
+      in: query
+      required: true
+      schema:
+        type: string
+      description: HMAC SHA256 signature of request parameters
+    symbolOptional:
+      name: symbol
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Trading pair symbol (e.g., btcinr)
+      example: btcinr
+    timestamp:
+      name: timestamp
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: Current timestamp in milliseconds
     startTime:
       name: startTime
       in: query
@@ -429,25 +450,20 @@ components:
         type: integer
         format: int64
       description: Start time in milliseconds
-    signature:
-      name: signature
+    recvWindow:
+      name: recvWindow
       in: query
-      required: true
+      required: false
       schema:
-        type: string
-      description: HMAC SHA256 signature of request parameters
+        type: integer
+        format: int64
+        maximum: 60000
+        default: 5000
+      description: Request validity window in milliseconds (max 60000)
     symbol:
       name: symbol
       in: query
       required: true
-      schema:
-        type: string
-      description: Trading pair symbol (e.g., btcinr)
-      example: btcinr
-    symbolOptional:
-      name: symbol
-      in: query
-      required: false
       schema:
         type: string
       description: Trading pair symbol (e.g., btcinr)
@@ -460,24 +476,6 @@ components:
         type: integer
         format: int64
       description: End time in milliseconds
-    recvWindow:
-      name: recvWindow
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-        maximum: 60000
-        default: 5000
-      description: Request validity window in milliseconds (max 60000)
-    timestamp:
-      name: timestamp
-      in: query
-      required: true
-      schema:
-        type: integer
-        format: int64
-      description: Current timestamp in milliseconds
   schemas:
     MyTrade:
       type: object
@@ -521,6 +519,17 @@ components:
           type: integer
           format: int64
           example: 1641463132
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code
+          example: -1121
+        message:
+          type: string
+          description: Error message
+          example: Invalid symbol.
     Order:
       type: object
       properties:
@@ -564,8 +573,9 @@ components:
           - sell
           example: buy
         stopPrice:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           example: null
         createdTime:
           type: integer
@@ -575,17 +585,6 @@ components:
           type: integer
           format: int64
           example: 1641463132
-    ErrorResponse:
-      type: object
-      properties:
-        code:
-          type: integer
-          description: Error code
-          example: -1121
-        message:
-          type: string
-          description: Error message
-          example: Invalid symbol.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

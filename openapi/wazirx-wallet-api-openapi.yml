@@ -1,9 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: WazirX REST Account Wallet API
-  description: 'WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.
-
-    '
+  title: WazirX REST Wallet API
+  description: WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.
   version: 1.0.0
   contact:
     name: WazirX API Support
@@ -140,66 +138,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/DepositAddress'
 components:
-  parameters:
-    startTime:
-      name: startTime
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-      description: Start time in milliseconds
-    signature:
-      name: signature
-      in: query
-      required: true
-      schema:
-        type: string
-      description: HMAC SHA256 signature of request parameters
-    endTime:
-      name: endTime
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-      description: End time in milliseconds
-    recvWindow:
-      name: recvWindow
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-        maximum: 60000
-        default: 5000
-      description: Request validity window in milliseconds (max 60000)
-    timestamp:
-      name: timestamp
-      in: query
-      required: true
-      schema:
-        type: integer
-        format: int64
-      description: Current timestamp in milliseconds
   schemas:
-    CoinInfo:
+    Network:
       type: object
       properties:
         coin:
           type: string
           example: btc
-        rapidListed:
+        depositEnable:
           type: boolean
-        name:
+        network:
           type: string
-          example: Bitcoin
-        binanceTransferEnable:
+          example: BTC
+        withdrawEnable:
           type: boolean
-        networkList:
-          type: array
-          items:
-            $ref: '#/components/schemas/Network'
+        withdrawFee:
+          type: string
+          example: '0.0005'
+        withdrawMin:
+          type: string
+          example: '0.001'
     Withdrawal:
       type: object
       properties:
@@ -238,6 +196,23 @@ components:
         txId:
           type: string
           example: abc123txhash
+    CoinInfo:
+      type: object
+      properties:
+        coin:
+          type: string
+          example: btc
+        rapidListed:
+          type: boolean
+        name:
+          type: string
+          example: Bitcoin
+        binanceTransferEnable:
+          type: boolean
+        networkList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Network'
     DepositAddress:
       type: object
       properties:
@@ -248,31 +223,55 @@ components:
           type: string
           example: btc
         tag:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           example: null
         url:
           type: string
           example: https://blockchain.info/address/1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf
-    Network:
-      type: object
-      properties:
-        coin:
-          type: string
-          example: btc
-        depositEnable:
-          type: boolean
-        network:
-          type: string
-          example: BTC
-        withdrawEnable:
-          type: boolean
-        withdrawFee:
-          type: string
-          example: '0.0005'
-        withdrawMin:
-          type: string
-          example: '0.001'
+  parameters:
+    signature:
+      name: signature
+      in: query
+      required: true
+      schema:
+        type: string
+      description: HMAC SHA256 signature of request parameters
+    timestamp:
+      name: timestamp
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: Current timestamp in milliseconds
+    startTime:
+      name: startTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: Start time in milliseconds
+    recvWindow:
+      name: recvWindow
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+        maximum: 60000
+        default: 5000
+      description: Request validity window in milliseconds (max 60000)
+    endTime:
+      name: endTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: End time in milliseconds
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

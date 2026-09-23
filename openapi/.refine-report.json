@@ -1,13 +1,7 @@
 {
   "provider": "wazirx",
   "sources": [
-    "wazirx-account-api-openapi.yml",
-    "wazirx-general-api-openapi.yml",
-    "wazirx-market-data-api-openapi.yml",
-    "wazirx-sub-account-api-openapi.yml",
-    "wazirx-trading-api-openapi.yml",
-    "wazirx-wallet-api-openapi.yml",
-    "wazirx-websocket-api-openapi.yml"
+    "_original/openapi.yml"
   ],
   "outputs": [
     "wazirx-account-api-openapi.yml",
@@ -21,6 +15,18 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "wazirx-account-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wazirx-general-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wazirx-market-data-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wazirx-sub-account-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wazirx-trading-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wazirx-wallet-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wazirx-websocket-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

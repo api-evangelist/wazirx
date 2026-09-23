@@ -1,9 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: WazirX REST Account Sub-Account API
-  description: 'WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.
-
-    '
+  title: WazirX REST Sub Account API
+  description: WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.
   version: 1.0.0
   contact:
     name: WazirX API Support
@@ -15,7 +13,7 @@ servers:
   description: Production server
 security: []
 tags:
-- name: Sub-Account
+- name: Sub Account
   description: Authenticated endpoints for sub-account management and fund transfers
 paths:
   /sapi/v1/sub_account/fund_transfer:
@@ -24,7 +22,7 @@ paths:
       description: Transfer funds between accounts. Requires TRADE permission.
       operationId: subAccountFundTransfer
       tags:
-      - Sub-Account
+      - Sub Account
       security:
       - ApiKeyAuth: []
         HmacSignature: []
@@ -77,7 +75,7 @@ paths:
       description: Get sub-account fund transfer history. Requires USER_DATA permission.
       operationId: getSubAccountFundTransferHistory
       tags:
-      - Sub-Account
+      - Sub Account
       security:
       - ApiKeyAuth: []
         HmacSignature: []
@@ -100,7 +98,7 @@ paths:
       description: Get sub-account details including balances. Requires USER_DATA permission.
       operationId: getSubAccounts
       tags:
-      - Sub-Account
+      - Sub Account
       security:
       - ApiKeyAuth: []
         HmacSignature: []
@@ -119,52 +117,6 @@ paths:
                   $ref: '#/components/schemas/SubAccount'
 components:
   schemas:
-    SubAccountTransfer:
-      type: object
-      properties:
-        status:
-          type: string
-          example: success
-        txnId:
-          type: string
-          example: txn_123
-    SubAccountTransferHistory:
-      type: object
-      properties:
-        asset:
-          type: string
-          example: btc
-        from:
-          type: string
-          example: main@example.com
-        qty:
-          type: string
-          example: '0.001'
-        status:
-          type: string
-          example: success
-        time:
-          type: integer
-          format: int64
-          example: 1641463132
-        to:
-          type: string
-          example: sub@example.com
-        txnId:
-          type: string
-          example: txn_123
-    SubAccountBalance:
-      type: object
-      properties:
-        asset:
-          type: string
-          example: btc
-        free:
-          type: string
-          example: '0.001'
-        locked:
-          type: string
-          example: '0.0'
     SubAccount:
       type: object
       properties:
@@ -190,6 +142,52 @@ components:
         status:
           type: string
           example: active
+    SubAccountTransfer:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        txnId:
+          type: string
+          example: txn_123
+    SubAccountBalance:
+      type: object
+      properties:
+        asset:
+          type: string
+          example: btc
+        free:
+          type: string
+          example: '0.001'
+        locked:
+          type: string
+          example: '0.0'
+    SubAccountTransferHistory:
+      type: object
+      properties:
+        asset:
+          type: string
+          example: btc
+        from:
+          type: string
+          example: main@example.com
+        qty:
+          type: string
+          example: '0.001'
+        status:
+          type: string
+          example: success
+        time:
+          type: integer
+          format: int64
+          example: 1641463132
+        to:
+          type: string
+          example: sub@example.com
+        txnId:
+          type: string
+          example: txn_123
   parameters:
     signature:
       name: signature
@@ -198,6 +196,14 @@ components:
       schema:
         type: string
       description: HMAC SHA256 signature of request parameters
+    timestamp:
+      name: timestamp
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: Current timestamp in milliseconds
     recvWindow:
       name: recvWindow
       in: query
@@ -208,14 +214,6 @@ components:
         maximum: 60000
         default: 5000
       description: Request validity window in milliseconds (max 60000)
-    timestamp:
-      name: timestamp
-      in: query
-      required: true
-      schema:
-        type: integer
-        format: int64
-      description: Current timestamp in milliseconds
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

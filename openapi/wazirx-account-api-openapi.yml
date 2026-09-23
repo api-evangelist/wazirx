@@ -1,9 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: WazirX REST Account API
-  description: 'WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.
-
-    '
+  description: WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.
   version: 1.0.0
   contact:
     name: WazirX API Support
@@ -71,6 +69,14 @@ components:
       schema:
         type: string
       description: HMAC SHA256 signature of request parameters
+    timestamp:
+      name: timestamp
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: Current timestamp in milliseconds
     recvWindow:
       name: recvWindow
       in: query
@@ -81,30 +87,7 @@ components:
         maximum: 60000
         default: 5000
       description: Request validity window in milliseconds (max 60000)
-    timestamp:
-      name: timestamp
-      in: query
-      required: true
-      schema:
-        type: integer
-        format: int64
-      description: Current timestamp in milliseconds
   schemas:
-    Fund:
-      type: object
-      properties:
-        asset:
-          type: string
-          example: btc
-        free:
-          type: string
-          example: '0.001'
-        locked:
-          type: string
-          example: '0.0'
-        reservedFee:
-          type: string
-          example: '0.0'
     AccountInfo:
       type: object
       properties:
@@ -121,6 +104,21 @@ components:
           type: integer
           format: int64
           example: 1641463132
+    Fund:
+      type: object
+      properties:
+        asset:
+          type: string
+          example: btc
+        free:
+          type: string
+          example: '0.001'
+        locked:
+          type: string
+          example: '0.0'
+        reservedFee:
+          type: string
+          example: '0.0'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

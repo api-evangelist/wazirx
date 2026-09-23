@@ -1,9 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: WazirX REST Account WebSocket API
-  description: 'WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.
-
-    '
+  title: WazirX REST Web Socket API
+  description: WazirX is an Indian cryptocurrency exchange providing REST and WebSocket APIs for spot trading on INR and crypto markets. The API supports order management, market data retrieval, account management, wallet operations, and sub-account management. Authentication uses HMAC SHA256 signatures for signed endpoints.
   version: 1.0.0
   contact:
     name: WazirX API Support
@@ -15,7 +13,7 @@ servers:
   description: Production server
 security: []
 tags:
-- name: WebSocket
+- name: Websocket
   description: Endpoints for WebSocket authentication token generation
 paths:
   /sapi/v1/create_auth_token:
@@ -24,7 +22,7 @@ paths:
       description: Create an authentication token for WebSocket private streams. Requires USER_DATA permission.
       operationId: createAuthToken
       tags:
-      - WebSocket
+      - Websocket
       security:
       - ApiKeyAuth: []
         HmacSignature: []
