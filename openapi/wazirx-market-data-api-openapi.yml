@@ -202,6 +202,20 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    Kline:
+      type: array
+      description: '[openTime, open, high, low, close, volume]'
+      items:
+        oneOf:
+        - type: integer
+        - type: string
+      example:
+      - 1641463020
+      - '3750000.0'
+      - '3760000.0'
+      - '3748000.0'
+      - '3755000.0'
+      - '0.5'
     Trade:
       type: object
       properties:
@@ -225,20 +239,6 @@ components:
         isBuyerMaker:
           type: boolean
           example: false
-    Kline:
-      type: array
-      description: '[openTime, open, high, low, close, volume]'
-      items:
-        oneOf:
-        - type: integer
-        - type: string
-      example:
-      - 1641463020
-      - '3750000.0'
-      - '3760000.0'
-      - '3748000.0'
-      - '3755000.0'
-      - '0.5'
     ErrorResponse:
       type: object
       properties:
@@ -250,6 +250,37 @@ components:
           type: string
           description: Error message
           example: Invalid symbol.
+    OrderBook:
+      type: object
+      properties:
+        lastUpdateAt:
+          type: integer
+          format: int64
+          example: 1641463132
+        asks:
+          type: array
+          description: Array of [price, quantity] pairs
+          items:
+            type: array
+            items:
+              type: string
+          example:
+          - - '3766000.0'
+            - '0.5'
+          - - '3767000.0'
+            - '1.0'
+        bids:
+          type: array
+          description: Array of [price, quantity] pairs
+          items:
+            type: array
+            items:
+              type: string
+          example:
+          - - '3764000.0'
+            - '0.3'
+          - - '3763000.0'
+            - '0.8'
     Ticker24hr:
       type: object
       properties:
@@ -288,38 +319,15 @@ components:
           format: int64
           description: Timestamp in milliseconds
           example: 1641463132
-    OrderBook:
-      type: object
-      properties:
-        lastUpdateAt:
-          type: integer
-          format: int64
-          example: 1641463132
-        asks:
-          type: array
-          description: Array of [price, quantity] pairs
-          items:
-            type: array
-            items:
-              type: string
-          example:
-          - - '3766000.0'
-            - '0.5'
-          - - '3767000.0'
-            - '1.0'
-        bids:
-          type: array
-          description: Array of [price, quantity] pairs
-          items:
-            type: array
-            items:
-              type: string
-          example:
-          - - '3764000.0'
-            - '0.3'
-          - - '3763000.0'
-            - '0.8'
   parameters:
+    endTime:
+      name: endTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: End time in milliseconds
     startTime:
       name: startTime
       in: query
@@ -336,14 +344,6 @@ components:
         type: string
       description: Trading pair symbol (e.g., btcinr)
       example: btcinr
-    endTime:
-      name: endTime
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-      description: End time in milliseconds
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

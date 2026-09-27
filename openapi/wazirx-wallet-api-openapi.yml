@@ -139,25 +139,6 @@ paths:
                 $ref: '#/components/schemas/DepositAddress'
 components:
   schemas:
-    Network:
-      type: object
-      properties:
-        coin:
-          type: string
-          example: btc
-        depositEnable:
-          type: boolean
-        network:
-          type: string
-          example: BTC
-        withdrawEnable:
-          type: boolean
-        withdrawFee:
-          type: string
-          example: '0.0005'
-        withdrawMin:
-          type: string
-          example: '0.001'
     Withdrawal:
       type: object
       properties:
@@ -196,23 +177,6 @@ components:
         txId:
           type: string
           example: abc123txhash
-    CoinInfo:
-      type: object
-      properties:
-        coin:
-          type: string
-          example: btc
-        rapidListed:
-          type: boolean
-        name:
-          type: string
-          example: Bitcoin
-        binanceTransferEnable:
-          type: boolean
-        networkList:
-          type: array
-          items:
-            $ref: '#/components/schemas/Network'
     DepositAddress:
       type: object
       properties:
@@ -230,30 +194,43 @@ components:
         url:
           type: string
           example: https://blockchain.info/address/1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf
+    Network:
+      type: object
+      properties:
+        coin:
+          type: string
+          example: btc
+        depositEnable:
+          type: boolean
+        network:
+          type: string
+          example: BTC
+        withdrawEnable:
+          type: boolean
+        withdrawFee:
+          type: string
+          example: '0.0005'
+        withdrawMin:
+          type: string
+          example: '0.001'
+    CoinInfo:
+      type: object
+      properties:
+        coin:
+          type: string
+          example: btc
+        rapidListed:
+          type: boolean
+        name:
+          type: string
+          example: Bitcoin
+        binanceTransferEnable:
+          type: boolean
+        networkList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Network'
   parameters:
-    signature:
-      name: signature
-      in: query
-      required: true
-      schema:
-        type: string
-      description: HMAC SHA256 signature of request parameters
-    timestamp:
-      name: timestamp
-      in: query
-      required: true
-      schema:
-        type: integer
-        format: int64
-      description: Current timestamp in milliseconds
-    startTime:
-      name: startTime
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-      description: Start time in milliseconds
     recvWindow:
       name: recvWindow
       in: query
@@ -272,6 +249,29 @@ components:
         type: integer
         format: int64
       description: End time in milliseconds
+    signature:
+      name: signature
+      in: query
+      required: true
+      schema:
+        type: string
+      description: HMAC SHA256 signature of request parameters
+    startTime:
+      name: startTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: Start time in milliseconds
+    timestamp:
+      name: timestamp
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: Current timestamp in milliseconds
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -75,6 +75,14 @@ paths:
                 $ref: '#/components/schemas/ExchangeInfo'
 components:
   schemas:
+    ServerTime:
+      type: object
+      properties:
+        serverTime:
+          type: integer
+          format: int64
+          description: Current server time in milliseconds
+          example: 1641463132
     ExchangeInfo:
       type: object
       properties:
@@ -100,14 +108,6 @@ components:
           type: string
           description: Status message
           example: System is running normally
-    ServerTime:
-      type: object
-      properties:
-        serverTime:
-          type: integer
-          format: int64
-          description: Current server time in milliseconds
-          example: 1641463132
     Symbol:
       type: object
       properties:
