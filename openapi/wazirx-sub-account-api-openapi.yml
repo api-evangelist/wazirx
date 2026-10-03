@@ -116,7 +116,70 @@ paths:
                 items:
                   $ref: '#/components/schemas/SubAccount'
 components:
+  parameters:
+    signature:
+      name: signature
+      in: query
+      required: true
+      schema:
+        type: string
+      description: HMAC SHA256 signature of request parameters
+    recvWindow:
+      name: recvWindow
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+        maximum: 60000
+        default: 5000
+      description: Request validity window in milliseconds (max 60000)
+    timestamp:
+      name: timestamp
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: Current timestamp in milliseconds
   schemas:
+    SubAccountBalance:
+      type: object
+      properties:
+        asset:
+          type: string
+          example: btc
+        free:
+          type: string
+          example: '0.001'
+        locked:
+          type: string
+          example: '0.0'
+    SubAccount:
+      type: object
+      properties:
+        action:
+          type: string
+          example: active
+        balance:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubAccountBalance'
+        created_at:
+          type: integer
+          format: int64
+          example: 1641463132
+        email:
+          type: string
+          example: sub@example.com
+        emailVerification:
+          type: boolean
+        portfolio:
+          type: string
+          example: '0.0'
+        status:
+          type: string
+          example: active
     SubAccountTransferHistory:
       type: object
       properties:
@@ -151,69 +214,6 @@ components:
         txnId:
           type: string
           example: txn_123
-    SubAccount:
-      type: object
-      properties:
-        action:
-          type: string
-          example: active
-        balance:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubAccountBalance'
-        created_at:
-          type: integer
-          format: int64
-          example: 1641463132
-        email:
-          type: string
-          example: sub@example.com
-        emailVerification:
-          type: boolean
-        portfolio:
-          type: string
-          example: '0.0'
-        status:
-          type: string
-          example: active
-    SubAccountBalance:
-      type: object
-      properties:
-        asset:
-          type: string
-          example: btc
-        free:
-          type: string
-          example: '0.001'
-        locked:
-          type: string
-          example: '0.0'
-  parameters:
-    recvWindow:
-      name: recvWindow
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-        maximum: 60000
-        default: 5000
-      description: Request validity window in milliseconds (max 60000)
-    signature:
-      name: signature
-      in: query
-      required: true
-      schema:
-        type: string
-      description: HMAC SHA256 signature of request parameters
-    timestamp:
-      name: timestamp
-      in: query
-      required: true
-      schema:
-        type: integer
-        format: int64
-      description: Current timestamp in milliseconds
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

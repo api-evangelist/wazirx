@@ -139,6 +139,23 @@ paths:
                 $ref: '#/components/schemas/DepositAddress'
 components:
   schemas:
+    DepositAddress:
+      type: object
+      properties:
+        address:
+          type: string
+          example: 1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf
+        coin:
+          type: string
+          example: btc
+        tag:
+          type:
+          - string
+          - 'null'
+          example: null
+        url:
+          type: string
+          example: https://blockchain.info/address/1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf
     Withdrawal:
       type: object
       properties:
@@ -177,23 +194,6 @@ components:
         txId:
           type: string
           example: abc123txhash
-    DepositAddress:
-      type: object
-      properties:
-        address:
-          type: string
-          example: 1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf
-        coin:
-          type: string
-          example: btc
-        tag:
-          type:
-          - string
-          - 'null'
-          example: null
-        url:
-          type: string
-          example: https://blockchain.info/address/1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf
     Network:
       type: object
       properties:
@@ -231,6 +231,21 @@ components:
           items:
             $ref: '#/components/schemas/Network'
   parameters:
+    signature:
+      name: signature
+      in: query
+      required: true
+      schema:
+        type: string
+      description: HMAC SHA256 signature of request parameters
+    endTime:
+      name: endTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: End time in milliseconds
     recvWindow:
       name: recvWindow
       in: query
@@ -241,29 +256,6 @@ components:
         maximum: 60000
         default: 5000
       description: Request validity window in milliseconds (max 60000)
-    endTime:
-      name: endTime
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-      description: End time in milliseconds
-    signature:
-      name: signature
-      in: query
-      required: true
-      schema:
-        type: string
-      description: HMAC SHA256 signature of request parameters
-    startTime:
-      name: startTime
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-      description: Start time in milliseconds
     timestamp:
       name: timestamp
       in: query
@@ -272,6 +264,14 @@ components:
         type: integer
         format: int64
       description: Current timestamp in milliseconds
+    startTime:
+      name: startTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: Start time in milliseconds
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

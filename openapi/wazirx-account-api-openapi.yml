@@ -61,32 +61,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/Fund'
 components:
-  parameters:
-    recvWindow:
-      name: recvWindow
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-        maximum: 60000
-        default: 5000
-      description: Request validity window in milliseconds (max 60000)
-    signature:
-      name: signature
-      in: query
-      required: true
-      schema:
-        type: string
-      description: HMAC SHA256 signature of request parameters
-    timestamp:
-      name: timestamp
-      in: query
-      required: true
-      schema:
-        type: integer
-        format: int64
-      description: Current timestamp in milliseconds
   schemas:
     Fund:
       type: object
@@ -119,6 +93,32 @@ components:
           type: integer
           format: int64
           example: 1641463132
+  parameters:
+    signature:
+      name: signature
+      in: query
+      required: true
+      schema:
+        type: string
+      description: HMAC SHA256 signature of request parameters
+    recvWindow:
+      name: recvWindow
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+        maximum: 60000
+        default: 5000
+      description: Request validity window in milliseconds (max 60000)
+    timestamp:
+      name: timestamp
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: Current timestamp in milliseconds
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

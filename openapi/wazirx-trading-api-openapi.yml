@@ -419,14 +419,21 @@ paths:
                   $ref: '#/components/schemas/MyTrade'
 components:
   parameters:
-    symbolOptional:
-      name: symbol
+    signature:
+      name: signature
+      in: query
+      required: true
+      schema:
+        type: string
+      description: HMAC SHA256 signature of request parameters
+    endTime:
+      name: endTime
       in: query
       required: false
       schema:
-        type: string
-      description: Trading pair symbol (e.g., btcinr)
-      example: btcinr
+        type: integer
+        format: int64
+      description: End time in milliseconds
     recvWindow:
       name: recvWindow
       in: query
@@ -437,37 +444,6 @@ components:
         maximum: 60000
         default: 5000
       description: Request validity window in milliseconds (max 60000)
-    endTime:
-      name: endTime
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-      description: End time in milliseconds
-    signature:
-      name: signature
-      in: query
-      required: true
-      schema:
-        type: string
-      description: HMAC SHA256 signature of request parameters
-    startTime:
-      name: startTime
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-      description: Start time in milliseconds
-    symbol:
-      name: symbol
-      in: query
-      required: true
-      schema:
-        type: string
-      description: Trading pair symbol (e.g., btcinr)
-      example: btcinr
     timestamp:
       name: timestamp
       in: query
@@ -476,7 +452,42 @@ components:
         type: integer
         format: int64
       description: Current timestamp in milliseconds
+    symbol:
+      name: symbol
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Trading pair symbol (e.g., btcinr)
+      example: btcinr
+    symbolOptional:
+      name: symbol
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Trading pair symbol (e.g., btcinr)
+      example: btcinr
+    startTime:
+      name: startTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: Start time in milliseconds
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code
+          example: -1121
+        message:
+          type: string
+          description: Error message
+          example: Invalid symbol.
     Order:
       type: object
       properties:
@@ -532,17 +543,6 @@ components:
           type: integer
           format: int64
           example: 1641463132
-    ErrorResponse:
-      type: object
-      properties:
-        code:
-          type: integer
-          description: Error code
-          example: -1121
-        message:
-          type: string
-          description: Error message
-          example: Invalid symbol.
     MyTrade:
       type: object
       properties:

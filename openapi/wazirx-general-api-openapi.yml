@@ -75,14 +75,6 @@ paths:
                 $ref: '#/components/schemas/ExchangeInfo'
 components:
   schemas:
-    ServerTime:
-      type: object
-      properties:
-        serverTime:
-          type: integer
-          format: int64
-          description: Current server time in milliseconds
-          example: 1641463132
     ExchangeInfo:
       type: object
       properties:
@@ -97,17 +89,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Symbol'
-    SystemStatus:
-      type: object
-      properties:
-        status:
-          type: string
-          description: System status
-          example: normal
-        message:
-          type: string
-          description: Status message
-          example: System is running normally
     Symbol:
       type: object
       properties:
@@ -138,6 +119,25 @@ components:
             - stop_limit
         isSpotTradingAllowed:
           type: boolean
+    ServerTime:
+      type: object
+      properties:
+        serverTime:
+          type: integer
+          format: int64
+          description: Current server time in milliseconds
+          example: 1641463132
+    SystemStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          description: System status
+          example: normal
+        message:
+          type: string
+          description: Status message
+          example: System is running normally
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
