@@ -94,13 +94,6 @@ components:
           format: int64
           example: 1641463132
   parameters:
-    signature:
-      name: signature
-      in: query
-      required: true
-      schema:
-        type: string
-      description: HMAC SHA256 signature of request parameters
     recvWindow:
       name: recvWindow
       in: query
@@ -119,6 +112,13 @@ components:
         type: integer
         format: int64
       description: Current timestamp in milliseconds
+    signature:
+      name: signature
+      in: query
+      required: true
+      schema:
+        type: string
+      description: HMAC SHA256 signature of request parameters
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

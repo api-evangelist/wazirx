@@ -116,33 +116,16 @@ paths:
                 items:
                   $ref: '#/components/schemas/SubAccount'
 components:
-  parameters:
-    signature:
-      name: signature
-      in: query
-      required: true
-      schema:
-        type: string
-      description: HMAC SHA256 signature of request parameters
-    recvWindow:
-      name: recvWindow
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-        maximum: 60000
-        default: 5000
-      description: Request validity window in milliseconds (max 60000)
-    timestamp:
-      name: timestamp
-      in: query
-      required: true
-      schema:
-        type: integer
-        format: int64
-      description: Current timestamp in milliseconds
   schemas:
+    SubAccountTransfer:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        txnId:
+          type: string
+          example: txn_123
     SubAccountBalance:
       type: object
       properties:
@@ -205,15 +188,32 @@ components:
         txnId:
           type: string
           example: txn_123
-    SubAccountTransfer:
-      type: object
-      properties:
-        status:
-          type: string
-          example: success
-        txnId:
-          type: string
-          example: txn_123
+  parameters:
+    recvWindow:
+      name: recvWindow
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+        maximum: 60000
+        default: 5000
+      description: Request validity window in milliseconds (max 60000)
+    timestamp:
+      name: timestamp
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: Current timestamp in milliseconds
+    signature:
+      name: signature
+      in: query
+      required: true
+      schema:
+        type: string
+      description: HMAC SHA256 signature of request parameters
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

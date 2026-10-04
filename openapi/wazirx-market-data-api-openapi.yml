@@ -225,17 +225,6 @@ components:
         isBuyerMaker:
           type: boolean
           example: false
-    ErrorResponse:
-      type: object
-      properties:
-        code:
-          type: integer
-          description: Error code
-          example: -1121
-        message:
-          type: string
-          description: Error message
-          example: Invalid symbol.
     Kline:
       type: array
       description: '[openTime, open, high, low, close, volume]'
@@ -250,6 +239,17 @@ components:
       - '3748000.0'
       - '3755000.0'
       - '0.5'
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code
+          example: -1121
+        message:
+          type: string
+          description: Error message
+          example: Invalid symbol.
     Ticker24hr:
       type: object
       properties:
@@ -320,6 +320,14 @@ components:
           - - '3763000.0'
             - '0.8'
   parameters:
+    startTime:
+      name: startTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: Start time in milliseconds
     endTime:
       name: endTime
       in: query
@@ -336,14 +344,6 @@ components:
         type: string
       description: Trading pair symbol (e.g., btcinr)
       example: btcinr
-    startTime:
-      name: startTime
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-      description: Start time in milliseconds
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
