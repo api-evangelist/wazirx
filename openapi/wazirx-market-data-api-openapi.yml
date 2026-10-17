@@ -225,31 +225,6 @@ components:
         isBuyerMaker:
           type: boolean
           example: false
-    Kline:
-      type: array
-      description: '[openTime, open, high, low, close, volume]'
-      items:
-        oneOf:
-        - type: integer
-        - type: string
-      example:
-      - 1641463020
-      - '3750000.0'
-      - '3760000.0'
-      - '3748000.0'
-      - '3755000.0'
-      - '0.5'
-    ErrorResponse:
-      type: object
-      properties:
-        code:
-          type: integer
-          description: Error code
-          example: -1121
-        message:
-          type: string
-          description: Error message
-          example: Invalid symbol.
     Ticker24hr:
       type: object
       properties:
@@ -319,7 +294,40 @@ components:
             - '0.3'
           - - '3763000.0'
             - '0.8'
+    Kline:
+      type: array
+      description: '[openTime, open, high, low, close, volume]'
+      items:
+        oneOf:
+        - type: integer
+        - type: string
+      example:
+      - 1641463020
+      - '3750000.0'
+      - '3760000.0'
+      - '3748000.0'
+      - '3755000.0'
+      - '0.5'
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code
+          example: -1121
+        message:
+          type: string
+          description: Error message
+          example: Invalid symbol.
   parameters:
+    symbol:
+      name: symbol
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Trading pair symbol (e.g., btcinr)
+      example: btcinr
     startTime:
       name: startTime
       in: query
@@ -336,14 +344,6 @@ components:
         type: integer
         format: int64
       description: End time in milliseconds
-    symbol:
-      name: symbol
-      in: query
-      required: true
-      schema:
-        type: string
-      description: Trading pair symbol (e.g., btcinr)
-      example: btcinr
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

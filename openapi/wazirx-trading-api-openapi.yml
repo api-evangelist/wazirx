@@ -418,49 +418,65 @@ paths:
                 items:
                   $ref: '#/components/schemas/MyTrade'
 components:
+  parameters:
+    timestamp:
+      name: timestamp
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: Current timestamp in milliseconds
+    signature:
+      name: signature
+      in: query
+      required: true
+      schema:
+        type: string
+      description: HMAC SHA256 signature of request parameters
+    symbol:
+      name: symbol
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Trading pair symbol (e.g., btcinr)
+      example: btcinr
+    symbolOptional:
+      name: symbol
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Trading pair symbol (e.g., btcinr)
+      example: btcinr
+    startTime:
+      name: startTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: Start time in milliseconds
+    recvWindow:
+      name: recvWindow
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+        maximum: 60000
+        default: 5000
+      description: Request validity window in milliseconds (max 60000)
+    endTime:
+      name: endTime
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      description: End time in milliseconds
   schemas:
-    MyTrade:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 1234
-        symbol:
-          type: string
-          example: btcinr
-        fee:
-          type: string
-          example: '0.00001'
-        feeCurrency:
-          type: string
-          example: btc
-        quoteQty:
-          type: string
-          example: '3755.0'
-        price:
-          type: string
-          example: '3755000.0'
-        qty:
-          type: string
-          example: '0.001'
-        orderId:
-          type: integer
-          format: int64
-          example: 28
-        side:
-          type: string
-          enum:
-          - buy
-          - sell
-          example: buy
-        isBuyerMaker:
-          type: boolean
-          example: false
-        time:
-          type: integer
-          format: int64
-          example: 1641463132
     Order:
       type: object
       properties:
@@ -527,64 +543,48 @@ components:
           type: string
           description: Error message
           example: Invalid symbol.
-  parameters:
-    timestamp:
-      name: timestamp
-      in: query
-      required: true
-      schema:
-        type: integer
-        format: int64
-      description: Current timestamp in milliseconds
-    startTime:
-      name: startTime
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-      description: Start time in milliseconds
-    endTime:
-      name: endTime
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-      description: End time in milliseconds
-    recvWindow:
-      name: recvWindow
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-        maximum: 60000
-        default: 5000
-      description: Request validity window in milliseconds (max 60000)
-    symbol:
-      name: symbol
-      in: query
-      required: true
-      schema:
-        type: string
-      description: Trading pair symbol (e.g., btcinr)
-      example: btcinr
-    symbolOptional:
-      name: symbol
-      in: query
-      required: false
-      schema:
-        type: string
-      description: Trading pair symbol (e.g., btcinr)
-      example: btcinr
-    signature:
-      name: signature
-      in: query
-      required: true
-      schema:
-        type: string
-      description: HMAC SHA256 signature of request parameters
+    MyTrade:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1234
+        symbol:
+          type: string
+          example: btcinr
+        fee:
+          type: string
+          example: '0.00001'
+        feeCurrency:
+          type: string
+          example: btc
+        quoteQty:
+          type: string
+          example: '3755.0'
+        price:
+          type: string
+          example: '3755000.0'
+        qty:
+          type: string
+          example: '0.001'
+        orderId:
+          type: integer
+          format: int64
+          example: 28
+        side:
+          type: string
+          enum:
+          - buy
+          - sell
+          example: buy
+        isBuyerMaker:
+          type: boolean
+          example: false
+        time:
+          type: integer
+          format: int64
+          example: 1641463132
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

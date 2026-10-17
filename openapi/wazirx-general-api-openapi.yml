@@ -75,36 +75,6 @@ paths:
                 $ref: '#/components/schemas/ExchangeInfo'
 components:
   schemas:
-    Symbol:
-      type: object
-      properties:
-        symbol:
-          type: string
-          example: btcinr
-        status:
-          type: string
-          example: trading
-        baseAsset:
-          type: string
-          example: btc
-        quoteAsset:
-          type: string
-          example: inr
-        baseAssetPrecision:
-          type: integer
-          example: 5
-        quoteAssetPrecision:
-          type: integer
-          example: 0
-        orderTypes:
-          type: array
-          items:
-            type: string
-            enum:
-            - limit
-            - stop_limit
-        isSpotTradingAllowed:
-          type: boolean
     ExchangeInfo:
       type: object
       properties:
@@ -138,6 +108,36 @@ components:
           format: int64
           description: Current server time in milliseconds
           example: 1641463132
+    Symbol:
+      type: object
+      properties:
+        symbol:
+          type: string
+          example: btcinr
+        status:
+          type: string
+          example: trading
+        baseAsset:
+          type: string
+          example: btc
+        quoteAsset:
+          type: string
+          example: inr
+        baseAssetPrecision:
+          type: integer
+          example: 5
+        quoteAssetPrecision:
+          type: integer
+          example: 0
+        orderTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - limit
+            - stop_limit
+        isSpotTradingAllowed:
+          type: boolean
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
